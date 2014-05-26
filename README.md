@@ -76,7 +76,8 @@ module UsersRepo
 
   # We'll likely provide `insert`, but this gives an idea of how minimal we'll be to start off.
   def insert(user)
-    result = query("INSERT INTO 'users' (username, name, age) VALUES (?, ?, ?)", user.id, user.name, user.age)
+    result = query("INSERT INTO 'users' (username, name, age) VALUES (?, ?, ?)",
+                   user.id, user.name, user.age)
     raise "Could not insert User #{user.id} into database" unless result.rows == 1
   end
 
@@ -104,35 +105,36 @@ beth = UsersRepo.with_id("beth").one        # Returns a single User object or ni
 API Summary
 -----------
 
-NOTE: This project is in very early exploratory stages. The API will change.
+NOTE: This project is in very early exploratory stages. The API **will** change.
 
 
 ### Mapper ###
 
-Most of the API you'll use will be in the class that you mix the mapper into.
+Most of the API you'll use will be in the object that you mix the mapper into.
 The mixin provides the following methods:
 
 ~~~ ruby
-query(sql_string)               # Runs SQL and returns an SQLResult.
-select(sql_select_string)       # Runs SQL and returns a Selection.
+query(sql_string)           # Runs SQL and returns an SQLResult.
+select(sql_select_string)   # Runs SQL and returns a Selection.
 ~~~
 
 ### SQLResult ###
 
 ~~~ ruby
-result.rows             # Number of rows that were affected by the SQL query.
-result.data             # Array of Hashes, for any data returned by the query.
+result.rows     # Number of rows that were affected by the SQL query.
+result.data     # Array of Hashes, for any data returned by the query.
 ~~~
 
 
 ### Selection ###
 
 The Selection is an Enumerable, representing the results of a SELECT query, mapped to domain objects.
-Most of your interactions with Selection will be through the Enumberable interface.
+Most of your interactions with Selections will be through the Enumberable interface.
 
 ~~~ ruby
-selection.one           # Returns a single domain object. Returns nil if no results; raises an exception if more than 1 result. 
-selection.one!          # Same as `one`, but raises an exception instead of returning nil, if the query returns no results.
+selection.one   # Returns a single domain object. Returns nil if no results; raises an exception if more than 1 result. 
+selection.one!  # Same as `one`, but raises an exception instead of returning nil, if the query returns no results.
+selection.each { |user| puts user.name }    # Iterate through the set of domain objects.
 ~~~
 
 
@@ -149,4 +151,4 @@ Contributing
 
 [project repo]: https://github.com/boochtek/ruby_preserves/fork
 [pull request]: https://github.com/boochtek/ruby_preserves/pulls
-[Virtus]: https://github.com/solnic/virtus
+[Virtus]: https://github.com/solnic/virtus#readme
