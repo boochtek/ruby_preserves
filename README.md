@@ -114,11 +114,11 @@ Most of the API you'll use will be in the object that you mix the mapper into.
 The mixin provides the following methods:
 
 ~~~ ruby
-query(sql_string)           # Runs SQL and returns an SQLResult.
+query(sql_string)           # Runs SQL and returns an SQL::Result.
 select(sql_select_string)   # Runs SQL and returns a Selection.
 ~~~
 
-### SQLResult ###
+### SQL::Result ###
 
 ~~~ ruby
 result.rows     # Number of rows that were affected by the SQL query.
