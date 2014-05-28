@@ -14,6 +14,7 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
@@ -81,3 +82,10 @@ RSpec.configure do |config|
   end
 =end
 end
+
+require "pg"
+conn = PG.connect(dbname: "preserves_test")
+conn.exec("DROP TABLE IF EXISTS users")
+conn.exec("CREATE TABLE users (username VARCHAR(255) NOT NULL,
+                               name VARCHAR(255),
+                               age INTEGER)")
