@@ -1,7 +1,7 @@
 require "preserves/version"
 require "preserves/mapper"
-require "preserves/sql/result"
+require "preserves/sql"
+
 
 module Preserves
-  # Your code goes here...
 end
