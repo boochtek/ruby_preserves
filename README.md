@@ -1,7 +1,8 @@
 Preserves
 =========
 
-Preserves is a minimalist ORM (object-relational mapper) for Ruby, using the Data Mapper pattern.
+Preserves is a minimalist ORM (object-relational mapper) for Ruby, using the
+Repository and Data Mapper patterns.
 
 We're trying to answer these questions:
 
@@ -31,7 +32,8 @@ The Data Mapper pattern provides several advantages:
   * Don't have to look elsewhere to understand everything a class contains.
 * Better meets the Single Responsibility Principle (SRP).
   * Domain model classes handle business logic.
-  * Mapper classes handle persistence.
+  * Repository classes handle persistence.
+  * Mapper classes handle mapping database fields to object attributes.
 
 
 Installation
@@ -65,14 +67,14 @@ end
 ~~~
 
 [Virtus] isn't strictly necessary, but it lets us define our model
-attributes easily and makes it easier to define our mapper.
-The mapper might look something like this:
+attributes easily and makes it easier to define the mappings.
+The repository might look something like this:
 
 ~~~ ruby
 Preserves.data_store = Preserves::PostgreSQL("my_database")
 
-module UsersRepo
-  extend Preserves.mapper(User)
+module UserRepository
+  extend Preserves.repository(for: User)
 
   # We'll likely provide `insert`, but this gives an idea of how minimal we'll be to start off.
   def insert(user)
@@ -91,14 +93,14 @@ module UsersRepo
 end
 ~~~
 
-Now we can create model objects and use the mapper to save them to and
+Now we can create model objects and use the repository to save them to and
 retrieve them from the database:
 
 ~~~ ruby
 craig = User.new(id: "booch", name: "Craig", age: 42)
-UsersRepo.insert(craig)
-users_over_40 = UsersRepo.older_than(40)    # Returns an Enumerable set of User objects.
-beth = UsersRepo.with_id("beth").one        # Returns a single User object or nil.
+UserRepository.insert(craig)
+users_over_40 = UserRepository.older_than(40)   # Returns an Enumerable set of User objects.
+beth = UserRepository.with_id("beth").one       # Returns a single User object or nil.
 ~~~
 
 
@@ -108,17 +110,17 @@ API Summary
 NOTE: This project is in very early exploratory stages. The API **will** change.
 
 
-### Mapper ###
+### Repository ###
 
-Most of the API you'll use will be in the object that you mix the mapper into.
+Most of the API you'll use will be in the your repository object.
 The mixin provides the following methods:
 
 ~~~ ruby
-query(sql_string)           # Runs SQL and returns an SQL::Result.
-select(sql_select_string)   # Runs SQL and returns a Selection.
+query(sql_string)           # Runs SQL and returns a Preserves::SQL::Result.
+select(sql_select_string)   # Runs SQL and returns a Preserves::Selection.
 ~~~
 
-### SQL::Result ###
+### Preserves::SQL::Result ###
 
 ~~~ ruby
 result.rows     # Number of rows that were affected by the SQL query.
@@ -126,7 +128,7 @@ result.data     # Array of Hashes, for any data returned by the query.
 ~~~
 
 
-### Selection ###
+### Preserves::Selection ###
 
 The Selection is an Enumerable, representing the results of a SELECT query, mapped to domain objects.
 Most of your interactions with Selections will be through the Enumberable interface.
