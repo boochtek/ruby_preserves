@@ -29,7 +29,7 @@ describe "Repository" do
   end
 
   describe "selecting results from a query to an object" do
-    describe "when DB has one user" do
+    describe "when DB has 1 user" do
       before do
         repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
       end
@@ -43,6 +43,26 @@ describe "Repository" do
 
       it "sets the attributes on the object" do
         expect(selection.first.id).to eq("booch")
+      end
+    end
+
+    describe "when DB has 2 users" do
+      before do
+        repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
+        repository.query("INSERT INTO users (username, name, age) VALUES ('beth', 'Beth', 39)")
+      end
+
+      let(:selection) { repository.select("SELECT username AS id FROM users") }
+
+      it "returns a set of 2 User objects" do
+        expect(selection.size).to eq(2)
+        expect(selection.first.class).to eq(User)
+        expect(selection.last.class).to eq(User)
+      end
+
+      it "sets the attributes on the objects" do
+        expect(selection.first.id).to eq("booch")
+        expect(selection.last.id).to eq("beth")
       end
     end
   end
