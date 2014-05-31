@@ -55,24 +55,29 @@ Or install it yourself as:
 Example Usage
 -------------
 
-First, create your model class:
+First, create your domain model class. You can use a Struct, an
+OStruct, a Virtus model, or a plain old Ruby object (PORO) class.
+We'll use a Struct in the examples, so we can initialize the fields easily.
 
 ~~~ ruby
-class User
-  include Virtus.model
-  attribute :id, String
-  attribute :name, String
-  attribute :age, Integer
+User = Struct.new(:id, :name, :age) do
 end
 ~~~
 
-[Virtus] isn't strictly necessary, but it lets us define our model
-attributes easily and makes it easier to define the mappings.
-The repository might look something like this:
+Next, configure the Preserves data store.
 
 ~~~ ruby
 Preserves.data_store = Preserves::PostgreSQL("my_database")
+~~~
 
+Then create a repository linked to the domain model class.
+By default, all attributes will be assumed to be Strings.
+For other attribute types, you'll need to supply the mapping.
+(We'll have some default mappings determined from the DB or model later.)
+Your repository should then define methods to access model objects
+in the database. (These will mostly be like ActiveRecord scopes.)
+
+~~~ ruby
 UserRepository = Preserves.repository(model: User) do
 
   # We'll likely provide `insert`, but this gives an idea of how minimal we'll be to start off.
@@ -96,7 +101,7 @@ Now we can create model objects and use the repository to save them to and
 retrieve them from the database:
 
 ~~~ ruby
-craig = User.new(id: "booch", name: "Craig", age: 42)
+craig = User.new("booch", "Craig", 42)
 UserRepository.insert(craig)
 users_over_40 = UserRepository.older_than(40)   # Returns an Enumerable set of User objects.
 beth = UserRepository.with_id("beth").one       # Returns a single User object or nil.
