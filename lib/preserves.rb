@@ -1,5 +1,5 @@
 require "preserves/version"
-require "preserves/mapper"
+require "preserves/repository"
 require "preserves/sql"
 
 
