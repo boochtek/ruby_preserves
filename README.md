@@ -73,7 +73,7 @@ The repository might look something like this:
 ~~~ ruby
 Preserves.data_store = Preserves::PostgreSQL("my_database")
 
-UserRepository = Preserves.repository(for: User) do
+UserRepository = Preserves.repository(model: User) do
 
   # We'll likely provide `insert`, but this gives an idea of how minimal we'll be to start off.
   def insert(user)

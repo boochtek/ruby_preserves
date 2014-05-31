@@ -1,6 +1,9 @@
 module Preserves
   class Repository
-    def initialize(*options)
+    attr_accessor :model_class
+
+    def initialize(options={})
+      self.model_class = options[:model]
     end
 
     def query(sql_string)
@@ -17,7 +20,7 @@ module Preserves
   private
 
     def hash_to_object(hash)
-      object = User.new
+      object = model_class.new
       hash.each_pair do |column_name, field_value|
         if object.respond_to?("#{column_name}=")
           object.send("#{column_name}=", field_value)

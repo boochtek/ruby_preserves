@@ -4,8 +4,8 @@ require "preserves/sql"
 
 
 module Preserves
-  def self.repository(*options, &block)
-    repository = Repository.new(*options)
+  def self.repository(options={}, &block)
+    repository = Repository.new(options)
     repository.instance_eval(&block)
     repository
   end
