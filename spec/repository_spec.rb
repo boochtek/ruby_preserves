@@ -7,8 +7,12 @@ class User
 end
 
 
+UserRepository = Preserves.repository(model: User) do
+end
+
+
 describe "Repository" do
-  subject(:repository) { Preserves::Repository.new }
+  subject(:repository) { UserRepository }
 
   describe "executing a query" do
 

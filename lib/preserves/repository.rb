@@ -1,5 +1,8 @@
 module Preserves
   class Repository
+    def initialize(*options)
+    end
+
     def query(sql_string)
       pg_result = SQL.connection(dbname: "preserves_test").exec(sql_string)
       SQL::Result.new(pg_result)
