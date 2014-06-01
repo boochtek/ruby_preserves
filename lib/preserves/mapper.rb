@@ -31,14 +31,7 @@ module Preserves
     end
 
     def add_relation_proxies(model_object)
-      has_many_mappings.each do |attribute_name, options|
-        table_name = options[:table_name] || attribute_name
-        foreign_key = options[:foreign_key] || self.primary_key
-        primary_key_value = attribute_value_to_field_value(primary_key_attribute, model_object.send(primary_key_attribute))
-        model_object.define_singleton_method(attribute_name) do
-          options[:repository].select("SELECT * FROM #{table_name} WHERE #{foreign_key} = #{primary_key_value}")
-        end
-      end
+      add_has_many_proxies(model_object)
     end
 
     def attribute_name_to_attribute_type(attribute_name)
@@ -95,6 +88,21 @@ module Preserves
         "'#{attribute_value}'"
       else
         attribute_value.to_s
+      end
+    end
+
+    def add_has_many_proxies(model_object)
+      has_many_mappings.each do |attribute_name, options|
+        add_has_many_proxy(model_object, attribute_name, options)
+      end
+    end
+
+    def add_has_many_proxy(model_object, attribute_name, options)
+      table_name = options[:table_name] || attribute_name
+      foreign_key = options[:foreign_key] || self.primary_key
+      primary_key_value = attribute_value_to_field_value(primary_key_attribute, model_object.send(primary_key_attribute))
+      model_object.define_singleton_method(attribute_name) do
+        options[:repository].select("SELECT * FROM #{table_name} WHERE #{foreign_key} = #{primary_key_value}")
       end
     end
 
