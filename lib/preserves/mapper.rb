@@ -3,10 +3,12 @@
 
 module Preserves
   class Mapper
+    attr_accessor :primary_key
     attr_accessor :name_mappings
     attr_accessor :type_mappings
 
     def initialize(&block)
+      self.primary_key = "id"
       self.name_mappings = {}
       self.type_mappings = {}
       self.instance_eval(&block)
@@ -26,6 +28,12 @@ module Preserves
     end
 
   protected
+
+    # Note that this works to set or get the primary key.
+    def primary_key(key_name = nil)
+      @primary_key = key_name unless key_name.nil?
+      @primary_key
+    end
 
     def map(*args)
       if args[0].is_a?(Hash)

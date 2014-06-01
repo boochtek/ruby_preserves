@@ -10,6 +10,7 @@ end
 
 UserRepository = Preserves.repository(model: User) do
   mapping do
+    primary_key 'username'
     map id: 'username'
     map :age, Integer
   end
