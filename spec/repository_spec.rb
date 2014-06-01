@@ -8,6 +8,9 @@ end
 
 
 UserRepository = Preserves.repository(model: User) do
+  mapping do
+    map id: 'username'
+  end
 end
 
 
@@ -69,5 +72,18 @@ describe "Repository" do
         expect(selection.last.id).to eq("beth")
       end
     end
+
+    describe "when mapping a field name to a different model attribute name" do
+      before do
+        repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
+      end
+
+      let(:selection) { repository.select("SELECT username FROM users") }
+
+      it "sets the attribute on the object" do
+        expect(selection.first.id).to eq("booch")
+      end
+    end
+
   end
 end

@@ -79,6 +79,9 @@ in the database. (These will mostly be like ActiveRecord scopes.)
 
 ~~~ ruby
 UserRepository = Preserves.repository(model: User) do
+  mapping do
+    map id: 'username'  # The database field named 'username' corresponds to the 'id' attribute in the model.
+  end
 
   # We'll likely provide `insert`, but this gives an idea of how minimal we'll be to start off.
   def insert(user)

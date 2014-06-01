@@ -1,6 +1,10 @@
+require "preserves/mapper"
+
+
 module Preserves
   class Repository
     attr_accessor :model_class
+    attr_accessor :mapper
 
     def initialize(options={})
       self.model_class = options[:model]
@@ -17,16 +21,26 @@ module Preserves
       (0..pg_result.ntuples-1).map{|n| hash_to_object(pg_result[n])}
     end
 
+  protected
+
+    def mapping(&block)
+      self.mapper = Mapper.new(&block)
+    end
+
   private
 
     def hash_to_object(hash)
       object = model_class.new
       hash.each_pair do |column_name, field_value|
-        if object.respond_to?("#{column_name}=")
-          object.send("#{column_name}=", field_value)
+        attribute_name = mapper.column_name_to_attribute_name(column_name)
+        if object.respond_to?("#{attribute_name}=")
+          object.send("#{attribute_name}=", field_value)
+        else
+          # raise Preserves::MissingModelSetter.new(model_class, attribute_name)
         end
       end
       object
     end
+
   end
 end
