@@ -3,9 +3,12 @@ require "preserves/sql"
 
 def setup_db(db)
   db.exec("DROP TABLE IF EXISTS users")
+  db.exec("DROP TABLE IF EXISTS addresses")
   db.exec("CREATE TABLE users (username VARCHAR(255) NOT NULL,
                                name VARCHAR(255),
                                age INTEGER)")
+  db.exec("CREATE TABLE addresses (city VARCHAR(255) NOT NULL,
+                                   username VARCHAR(255) NOT NULL)")
 end
 
 
