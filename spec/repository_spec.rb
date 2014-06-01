@@ -4,12 +4,14 @@ require "preserves"
 
 class User
   attr_accessor :id
+  attr_accessor :age
 end
 
 
 UserRepository = Preserves.repository(model: User) do
   mapping do
     map id: 'username'
+    map :age, Integer
   end
 end
 
@@ -82,6 +84,18 @@ describe "Repository" do
 
       it "sets the attribute on the object" do
         expect(selection.first.id).to eq("booch")
+      end
+    end
+
+    describe "when mapping a field to an Integer" do
+      before do
+        repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
+      end
+
+      let(:selection) { repository.select("SELECT age FROM users") }
+
+      it "sets the attribute on the object to the right type" do
+        expect(selection.first.age).to eq(43)
       end
     end
 
