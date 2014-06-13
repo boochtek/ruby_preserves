@@ -11,12 +11,12 @@ module Preserves
     end
 
     def query(sql_string)
-      pg_result = SQL.connection(dbname: "preserves_test").exec(sql_string)
+      pg_result = data_store.exec(sql_string)
       SQL::Result.new(pg_result)
     end
 
     def select(sql_string)
-      pg_result = SQL.connection(dbname: "preserves_test").exec(sql_string)
+      pg_result = data_store.exec(sql_string)
       fields = pg_result.fields
       (0..pg_result.ntuples-1).map{|n| hash_to_model_object(pg_result[n])}
     end
@@ -28,6 +28,11 @@ module Preserves
     end
 
   private
+
+    # NOTE: We'll allow overriding this default on a per-repository basis later.
+    def data_store
+      Preserves.data_store
+    end
 
     def hash_to_model_object(hash)
       object = model_class.new

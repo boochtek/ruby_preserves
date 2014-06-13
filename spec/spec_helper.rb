@@ -1,4 +1,8 @@
-require "preserves/sql"
+require "rspec"
+
+
+$LOAD_PATH.push(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
+require "preserves"
 
 
 def setup_db(db)
@@ -96,7 +100,7 @@ RSpec.configure do |config|
   end
 =end
 
-  db = Preserves::SQL.connection(dbname: "preserves_test")
+  db = Preserves.data_store
 
   setup_db(db)
 
