@@ -9,11 +9,15 @@ Preserves.data_store = Preserves.PostgreSQL("preserves_test")
 
 
 def setup_db(db)
+  db.exec("DROP TABLE IF EXISTS groups")
   db.exec("DROP TABLE IF EXISTS users")
   db.exec("DROP TABLE IF EXISTS addresses")
+  db.exec("CREATE TABLE groups (id INTEGER NOT NULL,
+                                name VARCHAR(255) NOT NULL)")
   db.exec("CREATE TABLE users (username VARCHAR(255) NOT NULL,
                                name VARCHAR(255),
-                               age INTEGER)")
+                               age INTEGER,
+                               group_id INTEGER)")
   db.exec("CREATE TABLE addresses (city VARCHAR(255) NOT NULL,
                                    username VARCHAR(255) NOT NULL)")
 end

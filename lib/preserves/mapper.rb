@@ -8,6 +8,7 @@ module Preserves
     attr_accessor :name_mappings
     attr_accessor :type_mappings
     attr_accessor :has_many_mappings
+    attr_accessor :belongs_to_mappings
 
     def initialize(repository, &block)
       self.repository = repository
@@ -15,6 +16,7 @@ module Preserves
       self.name_mappings = {}
       self.type_mappings = {}
       self.has_many_mappings = {}
+      self.belongs_to_mappings = {}
       self.instance_eval(&block)
     end
 
@@ -34,6 +36,7 @@ module Preserves
 
     def add_relation_proxies(model_object)
       add_has_many_proxies(model_object)
+      add_belongs_to_proxies(model_object)
     end
 
     def attribute_name_to_attribute_type(attribute_name)
@@ -71,6 +74,10 @@ module Preserves
       self.has_many_mappings[related_attribute_name] = options
     end
 
+    def belongs_to(related_attribute_name, options)
+      self.belongs_to_mappings[related_attribute_name] = options
+    end
+
   private
 
     def coerce(field_value, options={})
@@ -99,12 +106,32 @@ module Preserves
       end
     end
 
+    def add_belongs_to_proxies(model_object)
+      belongs_to_mappings.each do |attribute_name, options|
+        add_belongs_to_proxy(model_object, attribute_name, options)
+      end
+    end
+
     def add_has_many_proxy(model_object, attribute_name, options)
       table_name = options[:table_name] || attribute_name
       foreign_key = options[:foreign_key] || self.primary_key
       primary_key_value = attribute_value_to_field_value(primary_key_attribute, model_object.send(primary_key_attribute))
       model_object.define_singleton_method(attribute_name) do
         options[:repository].select("SELECT * FROM #{table_name} WHERE #{foreign_key} = #{primary_key_value}")
+      end
+    end
+
+    # FIXME: This works, but will always be an N+1 query, with the N queries being pretty non-performant as well.
+    def add_belongs_to_proxy(model_object, attribute_name, options)
+      this_table_name = "#{repository.model_class.to_s.downcase}s" # FIXME: Poor man's pluralize.
+      other_table_name = options[:table_name] || "#{attribute_name}s" # FIXME: Poor man's pluralize.
+      other_table_primary_key = options[:repository].mapper.primary_key
+      foreign_key = options[:foreign_key] || "#{attribute_name}_id"
+      primary_key = self.primary_key # Maybe we should move the `primary_key` method from protected to public.
+      primary_key_value = attribute_value_to_field_value(primary_key_attribute, model_object.send(primary_key_attribute))
+      model_object.define_singleton_method(attribute_name) do
+        sub_select = "(SELECT #{foreign_key} FROM #{this_table_name} WHERE #{primary_key} = #{primary_key_value})"
+        options[:repository].select("SELECT * FROM #{other_table_name} WHERE #{other_table_primary_key} = #{sub_select} LIMIT 1").first
       end
     end
 
