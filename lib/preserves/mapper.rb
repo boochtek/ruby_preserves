@@ -3,12 +3,14 @@
 
 module Preserves
   class Mapper
+    attr_accessor :repository
     attr_accessor :primary_key
     attr_accessor :name_mappings
     attr_accessor :type_mappings
     attr_accessor :has_many_mappings
 
-    def initialize(&block)
+    def initialize(repository, &block)
+      self.repository = repository
       self.primary_key = "id"
       self.name_mappings = {}
       self.type_mappings = {}
