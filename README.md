@@ -35,6 +35,8 @@ The Data Mapper pattern provides several advantages:
   * Repository classes handle persistence.
   * Mapper classes handle mapping database fields to object attributes.
 
+It's been pointed out that Preserves might not in fact even be an ORM, because it doesn't have a complete model of the relations between objects.
+
 
 Installation
 ------------
