@@ -94,11 +94,11 @@ UserRepository = Preserves.repository(model: User) do
   end
 
   def older_than(age)
-    select("SELECT *, username AS id FROM 'users' WHERE age > ? ORDER BY ?", age, :name)
+    select("SELECT *, username AS id FROM 'users' WHERE age > ? ORDER BY ?", age, :name).to_objects
   end
 
   def with_id(id)
-    select("SELECT *, username AS id FROM 'users' WHERE username = ?", id)
+    select("SELECT *, username AS id FROM 'users' WHERE username = ?", id).to_objects
   end
 end
 ~~~
@@ -144,7 +144,7 @@ The Selection is an Enumerable, representing the results of a SELECT query, mapp
 Most of your interactions with Selections will be through the Enumberable interface.
 
 ~~~ ruby
-selection.one   # Returns a single domain object. Returns nil if no results; raises an exception if more than 1 result. 
+selection.one   # Returns a single domain object. Returns nil if no results; raises an exception if more than 1 result.
 selection.one!  # Same as `one`, but raises an exception instead of returning nil, if the query returns no results.
 selection.each { |user| puts user.name }    # Iterate through the set of domain objects.
 ~~~

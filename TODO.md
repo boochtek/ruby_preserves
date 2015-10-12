@@ -23,13 +23,6 @@ Presentation
 ASAP
 ----
 
-* Repository#select should return an SQL::Result.
-    * The SQL::Result should be treated like a record set.
-    * Don't call hash_to_model_object automatically.
-    * Move hash_to_model_object to SQL::Result.
-        * Rename it to to_model.
-        * Have it take the mapper.
-* Remove all the proxy stuff.
 * Study how ActiveRecord does eager loading (include).
     * Does a 2nd query with WHERE IN (list of IDs) clause.
     * http://guides.rubyonrails.org/active_record_querying.html#eager-loading-associations
