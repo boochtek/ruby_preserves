@@ -45,7 +45,6 @@ module Preserves
           # raise Preserves::MissingModelSetter.new(model_class, attribute_name)
         end
       end
-      mapper.add_relation_proxies(object)
       object
     end
 

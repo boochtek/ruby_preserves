@@ -34,11 +34,6 @@ module Preserves
       uncoerce(attribute_value, to: attribute_type)
     end
 
-    def add_relation_proxies(model_object)
-      add_has_many_proxies(model_object)
-      add_belongs_to_proxies(model_object)
-    end
-
     def attribute_name_to_attribute_type(attribute_name)
       type_mappings.fetch(attribute_name.to_sym) { String }
     end
@@ -97,41 +92,6 @@ module Preserves
         "'#{attribute_value}'"
       else
         attribute_value.to_s
-      end
-    end
-
-    def add_has_many_proxies(model_object)
-      has_many_mappings.each do |attribute_name, options|
-        add_has_many_proxy(model_object, attribute_name, options)
-      end
-    end
-
-    def add_belongs_to_proxies(model_object)
-      belongs_to_mappings.each do |attribute_name, options|
-        add_belongs_to_proxy(model_object, attribute_name, options)
-      end
-    end
-
-    def add_has_many_proxy(model_object, attribute_name, options)
-      table_name = options[:table_name] || attribute_name
-      foreign_key = options[:foreign_key] || self.primary_key
-      primary_key_value = attribute_value_to_field_value(primary_key_attribute, model_object.send(primary_key_attribute))
-      model_object.define_singleton_method(attribute_name) do
-        options[:repository].select("SELECT * FROM #{table_name} WHERE #{foreign_key} = #{primary_key_value}")
-      end
-    end
-
-    # FIXME: This works, but will always be an N+1 query, with the N queries being pretty non-performant as well.
-    def add_belongs_to_proxy(model_object, attribute_name, options)
-      this_table_name = "#{repository.model_class.to_s.downcase}s" # FIXME: Poor man's pluralize.
-      other_table_name = options[:table_name] || "#{attribute_name}s" # FIXME: Poor man's pluralize.
-      other_table_primary_key = options[:repository].mapper.primary_key
-      foreign_key = options[:foreign_key] || "#{attribute_name}_id"
-      primary_key = self.primary_key # Maybe we should move the `primary_key` method from protected to public.
-      primary_key_value = attribute_value_to_field_value(primary_key_attribute, model_object.send(primary_key_attribute))
-      model_object.define_singleton_method(attribute_name) do
-        sub_select = "(SELECT #{foreign_key} FROM #{this_table_name} WHERE #{primary_key} = #{primary_key_value})"
-        options[:repository].select("SELECT * FROM #{other_table_name} WHERE #{other_table_primary_key} = #{sub_select} LIMIT 1").first
       end
     end
 

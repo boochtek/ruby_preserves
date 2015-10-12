@@ -123,53 +123,5 @@ describe "Repository" do
       end
     end
 
-    describe "when mapping a field to a has_many relation" do
-      before do
-        repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
-        repository.query("INSERT INTO addresses (city, username) VALUES ('Overland', 'booch')")
-        repository.query("INSERT INTO addresses (city, username) VALUES ('Wildwood', 'booch')")
-        repository.query("INSERT INTO addresses (city, username) VALUES ('Ballwin', 'booch')")
-      end
-
-      let(:selection) { repository.select("SELECT * FROM users JOIN addresses USING (username)") }
-
-      it "gets the basic fields" do
-        expect(selection.first.id).to eq('booch')
-        expect(selection.first.age).to eq(43)
-      end
-
-      it "gets all the related items" do
-        expect(selection.first.addresses).to_not be(nil)
-        expect(selection.first.addresses.size).to eq(3)
-        expect(selection.first.addresses.map(&:city)).to include("Overland")
-        expect(selection.first.addresses.map(&:city)).to include("Wildwood")
-        expect(selection.first.addresses.map(&:city)).to include("Ballwin")
-      end
-
-    end
-
-    describe "when mapping a field to a belongs_to relation" do
-      before do
-        repository.query("INSERT INTO groups (id, name) VALUES (1, 'Ruby Developers')")
-        repository.query("INSERT INTO users (username, name, age, group_id) VALUES ('booch', 'Craig', 43, 1)")
-        repository.query("INSERT INTO users (username, name, age, group_id) VALUES ('bob', 'Bob', 35, 1)")
-      end
-
-      let(:selection) { repository.select("SELECT * FROM users") }
-
-      it "gets the basic fields" do
-        expect(selection.first.id).to eq('booch')
-        expect(selection.first.age).to eq(43)
-        expect(selection.last.id).to eq('bob')
-        expect(selection.last.age).to eq(35)
-      end
-
-      it "gets the related item" do
-        expect(selection.first.group.name).to eq("Ruby Developers")
-        expect(selection.last.group.name).to eq("Ruby Developers")
-      end
-
-    end
-
   end
 end
