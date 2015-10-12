@@ -5,7 +5,7 @@ module Preserves
         @pg_result = pg_result
       end
 
-      def rows
+      def size
         @pg_result.ntuples == 0 ? @pg_result.cmd_tuples : @pg_result.ntuples
       end
     end
