@@ -24,7 +24,7 @@ module Preserves
   protected
 
     def mapping(&block)
-      self.mapper = Mapper.new(self, &block)
+      self.mapper = Mapper.new(self, model_class, &block)
     end
 
   private

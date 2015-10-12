@@ -4,14 +4,16 @@
 module Preserves
   class Mapper
     attr_accessor :repository
+    attr_accessor :model_class
     attr_accessor :primary_key
     attr_accessor :name_mappings
     attr_accessor :type_mappings
     attr_accessor :has_many_mappings
     attr_accessor :belongs_to_mappings
 
-    def initialize(repository, &block)
+    def initialize(repository, model_class, &block)
       self.repository = repository
+      self.model_class = model_class
       self.primary_key = "id"
       self.name_mappings = {}
       self.type_mappings = {}
