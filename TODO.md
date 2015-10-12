@@ -5,24 +5,18 @@ TODO
 Presentation
 ------------
 
-* Note in the presentation that the highly-regarded Python SQLAlchemy has always used the Data Mapper pattern.
-* Slide about N+1 queries.
-* Slide about DSLs.
-    * Internal vs. external DSLs.
-        * SQL is an external DSL.
-    * DSLs versus APIs.
-        * DSLs (in Racket, at least) give DSL-specific error messages, per Matthias Felleisen.
-* Presentation should talk about my wrong turn trying to use proxy objects for relations.
-    * Led to N+1 queries, complexity.
-    * Preserves.repository() should return a module to mix in, and not take a block.
-        * And should not be singletons.
-            * Might use method_missing on class to allow usage as if it's a singleton.
-* Create short URL.
+* Create the short URL. (NO UNDERSCORES)
+    * http://tinyurl.com/ruby-preserves-rubyconf
+    * https://rawgit.com/booch/presentations/Ruby_Preserves-RubyConf-2015-11-15/Ruby_Preserves/slides.html
 
 
 ASAP
 ----
 
+* Finish up eager loading stuff.
+    * has_many_through
+    * belongs_to
+* Move SQL::Result#to_objects to Repository#map, delegating to Mapper#map.
 * Study how ActiveRecord does eager loading (include).
     * Does a 2nd query with WHERE IN (list of IDs) clause:
         * SELECT * FROM clients LIMIT 10
@@ -33,8 +27,11 @@ ASAP
         * SELECT * FROM artists
         * SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 1)) UNION ALL SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 2))
     * http://sequel.jeremyevans.net/rdoc/files/doc/advanced_associations_rdoc.html#label-Eager+Loading+via+eager
-* Do eager loading of belongs_to associations, like we do for has_many.
-* Move SQL::Result#to_objects to Repository#map, delegating to Mapper#map.
+* Make placeholders work.
+    * Probably just need to change exec to exec_params and use PostgreSQL-style placeholders.
+    * Use them in our own code instead of hard-coding or string interpolation.
+    * conn.exec_params('SELECT $1, $2, $3', [1, 2, nil])
+    * Don't forget to update README.
 * Convenience methods.
     * only (better matches with first/second/last) / only!
         * Rename one/one!, but keep aliases to those old names.
@@ -47,13 +44,17 @@ ASAP
     * scope
 * Show how to use a different repository for tests, if necessary.
     * Like an in-memory repository.
+    * I assume we'd have to use a completely different repository.
+        * Since we require SQL, we can't really do in-memory.
 * Show examples using foreign keys and PostgreSQL arrays.
     * Probably advise NOT to do belongs_to mappings.
 * has_many :through
     * Allow, but don't require, join table to have an associated Repository object.
     * Use AR syntax, but store them separately in Mapper.
-* Make placeholders work.
-    * Use them in our own code instead of hard-coding or string interpolation.
+* Preserves.repository() should return a module to mix in, and not take a block.
+    * And should not be singletons.
+        * Might use method_missing on class to allow usage as if it's a singleton.
+    * Use the Module Factory pattern.
 
 
 Soonish
@@ -69,12 +70,13 @@ Soonish
     * INTEGER
     * DATE
     * TIME
+* Prepared statements.
+* Examples of pagination.
 * Be consistent between strings and symbols.
 * Allow strings in place of class names for specifying repositories.
     * Because we'll have circular references for belongs_to/has_many pairs.
     * Or should we not allow that, because it's bad for OOP to have circular dependencies?
         * Or maybe not allow belongs_to at all.
-* Prepared statements.
 * Unit tests.
     * We currently only have integration/acceptance tests.
 
