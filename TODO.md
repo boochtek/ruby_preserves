@@ -24,15 +24,17 @@ ASAP
 ----
 
 * Study how ActiveRecord does eager loading (include).
-    * Does a 2nd query with WHERE IN (list of IDs) clause.
+    * Does a 2nd query with WHERE IN (list of IDs) clause:
+        * SELECT * FROM clients LIMIT 10
+        * SELECT addresses.* FROM addresses WHERE (addresses.client_id IN (1,2,3,4,5,6,7,8,9,10))
     * http://guides.rubyonrails.org/active_record_querying.html#eager-loading-associations
 * Study how Sequel does eager loading.
-    * Does 2 queries:
-        * SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 1) LIMIT 10) UNION ALL
-        * SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 1) LIMIT 10)
+    * Does a 2nd query, creating a UNION of a bunch of nested SELECTs:
+        * SELECT * FROM artists
+        * SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 1)) UNION ALL SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 2))
     * http://sequel.jeremyevans.net/rdoc/files/doc/advanced_associations_rdoc.html#label-Eager+Loading+via+eager
-* Add a way to do eager loading of associations.
-    * Make a variant of to_model() that takes an association name and foreign key name.
+* Do eager loading of belongs_to associations, like we do for has_many.
+* Move SQL::Result#to_objects to Repository#map, delegating to Mapper#map.
 * Convenience methods.
     * only (better matches with first/second/last) / only!
         * Rename one/one!, but keep aliases to those old names.
@@ -63,7 +65,6 @@ Soonish
         * Or should we use solnic/coercible gem?
     * Allow a way to specify more type mappings/coercions.
     	 * Registration?
-* Allow specifying SELECT statement for has_many proxy getter.
 * Get default mappings from DB schema.
     * INTEGER
     * DATE
@@ -74,7 +75,6 @@ Soonish
     * Or should we not allow that, because it's bad for OOP to have circular dependencies?
         * Or maybe not allow belongs_to at all.
 * Prepared statements.
-* Should probably use a proxy object instead of a proxy method for associations/relations.
 * Unit tests.
     * We currently only have integration/acceptance tests.
 
@@ -113,3 +113,4 @@ These can be deferred until after we've proven out the concept.
 * Use a CI service.
 * Use Ruby 2.1 keyword arguments.
 * Use cursors.
+* Performance testing.

@@ -40,13 +40,14 @@ module Preserves
       type_mappings.fetch(attribute_name.to_sym) { String }
     end
 
-  protected
-
     # Note that this works to set or get the primary key.
+    # TODO: We don't want to allow publicly setting this, but we need to publicly get it until we move to_objects into Mapper.
     def primary_key(key_name = nil)
       @primary_key = key_name unless key_name.nil?
       @primary_key
     end
+
+  protected
 
     def primary_key_attribute
       column_name_to_attribute_name(primary_key)

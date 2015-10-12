@@ -34,7 +34,7 @@ UserRepository = Preserves.repository(model: User) do
     primary_key 'username'
     map id: 'username'
     map :age, Integer
-    has_many :addresses, repository: AddressRepository
+    has_many :addresses, repository: AddressRepository, foreign_key: 'username'
     belongs_to :group, repository: GroupRepository
   end
 end
@@ -126,6 +126,54 @@ describe "Repository" do
       it "sets the attribute on the object to the right type" do
         expect(model_objects.first.age).to eq(43)
       end
+    end
+
+    describe "when mapping a field to an Integer" do
+      before do
+        repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
+      end
+
+      let(:selection) { repository.select("SELECT age FROM users") }
+      let(:model_objects) { selection.to_objects(UserRepository.mapper) }
+
+      it "sets the attribute on the object to the right type" do
+        expect(model_objects.first.age).to eq(43)
+      end
+    end
+
+    describe "when mapping a has_many relation" do
+      before do
+        repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
+        repository.query("INSERT INTO users (username, name, age) VALUES ('beth', 'Beth', 39)")
+        repository.query("INSERT INTO addresses (city, username) VALUES ('Overland', 'booch')")
+        repository.query("INSERT INTO addresses (city, username) VALUES ('Wildwood', 'booch')")
+        repository.query("INSERT INTO addresses (city, username) VALUES ('Ballwin', 'booch')")
+        repository.query("INSERT INTO addresses (city, username) VALUES ('Ballwin', 'beth')")
+        repository.query("INSERT INTO addresses (city, username) VALUES ('Keokuk', 'unknown')")
+      end
+
+      let(:selection) { repository.select("SELECT * FROM users") }
+      let(:address_selection) { repository.select("SELECT * FROM addresses") }
+      let(:model_objects) { selection.to_objects(UserRepository.mapper, addresses: address_selection) }
+
+      it "gets the basic fields" do
+        expect(model_objects.first.id).to eq('booch')
+        expect(model_objects.first.age).to eq(43)
+        expect(model_objects.last.id).to eq('beth')
+        expect(model_objects.last.age).to eq(39)
+      end
+
+      it "gets all the related items" do
+        expect(model_objects.first.addresses).to_not be(nil)
+        expect(model_objects.first.addresses.size).to eq(3)
+        expect(model_objects.first.addresses.map(&:city)).to include("Overland")
+        expect(model_objects.first.addresses.map(&:city)).to include("Wildwood")
+        expect(model_objects.first.addresses.map(&:city)).to include("Ballwin")
+        expect(model_objects.last.addresses).to_not be(nil)
+        expect(model_objects.last.addresses.size).to eq(1)
+        expect(model_objects.last.addresses.map(&:city)).to include("Ballwin")
+      end
+
     end
 
   end
