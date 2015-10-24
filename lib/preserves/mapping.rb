@@ -3,16 +3,16 @@ module Preserves
 
     attr_accessor :repository
     attr_accessor :model_class
-    attr_writer   :primary_key
     attr_accessor :name_mappings
     attr_accessor :type_mappings
     attr_accessor :has_many_mappings
     attr_accessor :belongs_to_mappings
 
     def initialize(repository, model_class, &block)
+      table_name pluralize(model_class.name.downcase)
+      primary_key "id"
       self.repository = repository
       self.model_class = model_class
-      self.primary_key = "id"
       self.name_mappings = {}
       self.type_mappings = {}
       self.has_many_mappings = {}
@@ -20,9 +20,16 @@ module Preserves
       self.instance_eval(&block)
     end
 
+    # Note that this works to set or get the table name.
+    # TODO: We don't want to allow publicly setting this, but we need to publicly get it.
+    def table_name(name=nil)
+      @table_name = name unless name.nil?
+      @table_name
+    end
+
     # Note that this works to set or get the primary key.
-    # TODO: We don't want to allow publicly setting this, but we need to publicly get it until we move to_objects into Mapper.
-    def primary_key(key_name = nil)
+    # TODO: We don't want to allow publicly setting this, but we need to publicly get it.
+    def primary_key(key_name=nil)
       @primary_key = key_name unless key_name.nil?
       @primary_key
     end
@@ -50,6 +57,17 @@ module Preserves
 
     def belongs_to(related_attribute_name, options)
       self.belongs_to_mappings[related_attribute_name] = options
+    end
+
+    def pluralize(string)
+      case string
+      when /(x|ch|ss|sh)$/i
+        string + "es"
+      when /s$/i
+        string
+      else
+        string + "s"
+      end
     end
 
   end
