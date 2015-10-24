@@ -20,6 +20,10 @@ module Preserves
       SQL::Result.new(pg_result)
     end
 
+    def map(result, *options)
+      result.to_objects(mapper, *options)
+    end
+
   protected
 
     def mapping(&block)

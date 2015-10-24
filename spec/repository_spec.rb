@@ -69,7 +69,7 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT username AS id FROM users") }
-      let(:model_objects) { selection.to_objects(UserRepository.mapper) }
+      let(:model_objects) { repository.map(selection) }
 
       it "returns a set of 1 User object" do
         expect(selection.size).to eq(1)
@@ -88,7 +88,7 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT username AS id FROM users") }
-      let(:model_objects) { selection.to_objects(UserRepository.mapper) }
+      let(:model_objects) { repository.map(selection) }
 
       it "returns a set of 2 User objects" do
         expect(selection.size).to eq(2)
@@ -108,7 +108,7 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT username FROM users") }
-      let(:model_objects) { selection.to_objects(UserRepository.mapper) }
+      let(:model_objects) { repository.map(selection) }
 
       it "sets the attribute on the object" do
         expect(model_objects.first.id).to eq("booch")
@@ -121,7 +121,7 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT age FROM users") }
-      let(:model_objects) { selection.to_objects(UserRepository.mapper) }
+      let(:model_objects) { repository.map(selection) }
 
       it "sets the attribute on the object to the right type" do
         expect(model_objects.first.age).to eq(43)
@@ -134,7 +134,7 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT age FROM users") }
-      let(:model_objects) { selection.to_objects(UserRepository.mapper) }
+      let(:model_objects) { repository.map(selection) }
 
       it "sets the attribute on the object to the right type" do
         expect(model_objects.first.age).to eq(43)
@@ -154,7 +154,7 @@ describe "Repository" do
 
       let(:selection) { repository.select("SELECT * FROM users") }
       let(:address_selection) { repository.select("SELECT * FROM addresses") }
-      let(:model_objects) { selection.to_objects(UserRepository.mapper, addresses: address_selection) }
+      let(:model_objects) { repository.map(selection, addresses: address_selection) }
 
       it "gets the basic fields" do
         expect(model_objects.first.id).to eq('booch')
