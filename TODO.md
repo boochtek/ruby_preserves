@@ -48,7 +48,6 @@ ASAP
 Soonish
 -------
 
-* Fix warnings.
 * More coercions.
     * Move coercions to their own class(es).
         * Or should we use solnic/coercible gem?

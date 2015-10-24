@@ -3,7 +3,7 @@ module Preserves
 
     attr_accessor :repository
     attr_accessor :model_class
-    attr_accessor :primary_key
+    attr_writer   :primary_key
     attr_accessor :name_mappings
     attr_accessor :type_mappings
     attr_accessor :has_many_mappings
