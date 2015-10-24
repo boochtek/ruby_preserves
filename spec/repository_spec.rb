@@ -56,7 +56,7 @@ describe "Repository" do
       expect{ query }.to change{ number_of_rows_in_user_table }
     end
 
-    it "the number of rows processed" do
+    it "returns the number of rows processed" do
       expect(query.size).to eq(1)
     end
   end
