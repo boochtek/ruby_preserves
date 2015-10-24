@@ -63,6 +63,19 @@ describe "Repository" do
 
   describe "selecting results from a query to an object" do
 
+    describe "when DB has 0 users" do
+      let(:selection) { repository.select("SELECT username AS id FROM users") }
+
+      it "works when restricting with `only`" do
+        expect(selection.only.size).to eq(0)
+      end
+
+      it "raises an exception when restricting with `only!`" do
+        expect{ selection.only! }.to raise_exception("expected exactly 1 result")
+      end
+
+    end
+
     describe "when DB has 1 user" do
       before do
         repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
@@ -78,6 +91,14 @@ describe "Repository" do
 
       it "sets the attributes on the object" do
         expect(model_objects.first.id).to eq("booch")
+      end
+
+      it "works when restricting with `only`" do
+        expect(selection.only.size).to eq(1)
+      end
+
+      it "works when restricting with `only!`" do
+        expect(selection.only!.size).to eq(1)
       end
     end
 
@@ -100,6 +121,15 @@ describe "Repository" do
         expect(model_objects.first.id).to eq("booch")
         expect(model_objects.last.id).to eq("beth")
       end
+
+      it "raises an exception when restricting with `only`" do
+        expect{ selection.only }.to raise_exception("expected only 1 result")
+      end
+
+      it "raises an exception when restricting with `only!`" do
+        expect{ selection.only! }.to raise_exception("expected exactly 1 result")
+      end
+
     end
 
     describe "when mapping a field name to a different model attribute name" do

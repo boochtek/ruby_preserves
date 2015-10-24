@@ -134,19 +134,9 @@ select(sql_select_string)   # Runs SQL and returns a Preserves::Selection.
 
 ~~~ ruby
 result.size     # Number of rows that were affected by the SQL query.
-result.data     # Array of Hashes, for any data returned by the query.
-~~~
-
-
-### Preserves::Selection ###
-
-The Selection is an Enumerable, representing the results of a SELECT query, mapped to domain objects.
-Most of your interactions with Selections will be through the Enumberable interface.
-
-~~~ ruby
-selection.one   # Returns a single domain object. Returns nil if no results; raises an exception if more than 1 result.
-selection.one!  # Same as `one`, but raises an exception instead of returning nil, if the query returns no results.
-selection.each { |user| puts user.name }    # Iterate through the set of domain objects.
+result.only     # Raises an exception if more than 1 result. (Aliased as `one`.)
+result.only!    # Raises an exception unless exactly 1 result. (Aliased as `one!`.)
+result.each     # Iterate through the result set of rows.
 ~~~
 
 

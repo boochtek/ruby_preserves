@@ -23,8 +23,6 @@ ASAP
     * has_many_through
     * belongs_to
 * Convenience methods.
-    * only (better matches with first/second/last) / only!
-        * Rename one/one!, but keep aliases to those old names.
     * fetch / [] / fetch!
         * To get models by primary key.
     * first! / last!
