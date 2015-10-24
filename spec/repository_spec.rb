@@ -67,7 +67,7 @@ describe "Repository" do
       let(:selection) { repository.select("SELECT username AS id FROM users") }
 
       it "works when restricting with `only`" do
-        expect(selection.only.size).to eq(0)
+        expect(selection.only).to eq(nil)
       end
 
       it "raises an exception when restricting with `only!`" do
@@ -82,23 +82,22 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT username AS id FROM users") }
-      let(:model_objects) { repository.map(selection) }
 
       it "returns a set of 1 User object" do
         expect(selection.size).to eq(1)
-        expect(model_objects.first.class).to eq(User)
+        expect(selection.first.class).to eq(User)
       end
 
       it "sets the attributes on the object" do
-        expect(model_objects.first.id).to eq("booch")
+        expect(selection.first.id).to eq("booch")
       end
 
       it "works when restricting with `only`" do
-        expect(selection.only.size).to eq(1)
+        expect(selection.only.id).to eq("booch")
       end
 
       it "works when restricting with `only!`" do
-        expect(selection.only!.size).to eq(1)
+        expect(selection.only!.id).to eq("booch")
       end
     end
 
@@ -109,17 +108,16 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT username AS id FROM users") }
-      let(:model_objects) { repository.map(selection) }
 
       it "returns a set of 2 User objects" do
         expect(selection.size).to eq(2)
-        expect(model_objects.first.class).to eq(User)
-        expect(model_objects.last.class).to eq(User)
+        expect(selection.first.class).to eq(User)
+        expect(selection.last.class).to eq(User)
       end
 
       it "sets the attributes on the objects" do
-        expect(model_objects.first.id).to eq("booch")
-        expect(model_objects.last.id).to eq("beth")
+        expect(selection.first.id).to eq("booch")
+        expect(selection.last.id).to eq("beth")
       end
 
       it "raises an exception when restricting with `only`" do
@@ -138,10 +136,9 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT username FROM users") }
-      let(:model_objects) { repository.map(selection) }
 
       it "sets the attribute on the object" do
-        expect(model_objects.first.id).to eq("booch")
+        expect(selection.first.id).to eq("booch")
       end
     end
 
@@ -151,10 +148,9 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT age FROM users") }
-      let(:model_objects) { repository.map(selection) }
 
       it "sets the attribute on the object to the right type" do
-        expect(model_objects.first.age).to eq(43)
+        expect(selection.first.age).to eq(43)
       end
     end
 
@@ -164,10 +160,9 @@ describe "Repository" do
       end
 
       let(:selection) { repository.select("SELECT age FROM users") }
-      let(:model_objects) { repository.map(selection) }
 
       it "sets the attribute on the object to the right type" do
-        expect(model_objects.first.age).to eq(43)
+        expect(selection.first.age).to eq(43)
       end
     end
 
@@ -182,26 +177,25 @@ describe "Repository" do
         repository.query("INSERT INTO addresses (city, username) VALUES ('Keokuk', 'unknown')")
       end
 
-      let(:selection) { repository.select("SELECT * FROM users") }
-      let(:address_selection) { repository.select("SELECT * FROM addresses") }
-      let(:model_objects) { repository.map(selection, addresses: address_selection) }
+      let(:address_query) { repository.query("SELECT * FROM addresses") }
+      let(:selection) { repository.select("SELECT * FROM users", addresses: address_query) }
 
       it "gets the basic fields" do
-        expect(model_objects.first.id).to eq('booch')
-        expect(model_objects.first.age).to eq(43)
-        expect(model_objects.last.id).to eq('beth')
-        expect(model_objects.last.age).to eq(39)
+        expect(selection.first.id).to eq('booch')
+        expect(selection.first.age).to eq(43)
+        expect(selection.last.id).to eq('beth')
+        expect(selection.last.age).to eq(39)
       end
 
       it "gets all the related items" do
-        expect(model_objects.first.addresses).to_not be(nil)
-        expect(model_objects.first.addresses.size).to eq(3)
-        expect(model_objects.first.addresses.map(&:city)).to include("Overland")
-        expect(model_objects.first.addresses.map(&:city)).to include("Wildwood")
-        expect(model_objects.first.addresses.map(&:city)).to include("Ballwin")
-        expect(model_objects.last.addresses).to_not be(nil)
-        expect(model_objects.last.addresses.size).to eq(1)
-        expect(model_objects.last.addresses.map(&:city)).to include("Ballwin")
+        expect(selection.first.addresses).to_not be(nil)
+        expect(selection.first.addresses.size).to eq(3)
+        expect(selection.first.addresses.map(&:city)).to include("Overland")
+        expect(selection.first.addresses.map(&:city)).to include("Wildwood")
+        expect(selection.first.addresses.map(&:city)).to include("Ballwin")
+        expect(selection.last.addresses).to_not be(nil)
+        expect(selection.last.addresses.size).to eq(1)
+        expect(selection.last.addresses.map(&:city)).to include("Ballwin")
       end
 
     end

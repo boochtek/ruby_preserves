@@ -126,17 +126,32 @@ Most of the API you'll use will be in the your repository object.
 The mixin provides the following methods:
 
 ~~~ ruby
-query(sql_string)           # Runs SQL and returns a Preserves::SQL::ResultSet.
-select(sql_select_string)   # Runs SQL and returns a Preserves::Selection.
+query(sql_string)     # Runs SQL and returns a Preserves::SQL::ResultSet.
+select(sql_string)    # Runs SQL and returns a Preserves::Selection.
+select(sql_string, param1, param2)  # Include bind params for the SQL query.
+select(sql_string, association_name: sql_result)  # Include associations.
 ~~~
+
 
 ### Preserves::SQL::ResultSet ###
 
 ~~~ ruby
 result.size     # Number of rows that were affected by the SQL query.
-result.only     # Raises an exception if more than 1 result. (Aliased as `one`.)
-result.only!    # Raises an exception unless exactly 1 result. (Aliased as `one!`.)
-result.each     # Iterate through the result set of rows.
+~~~
+
+
+### Preserves::Selection ###
+
+A Selection is an Enumerable, representing the results of a SELECT query,
+mapped to domain model objects.
+Most of your interactions with Selections will be through the Enumerable interface.
+
+~~~ ruby
+selection.each      # Iterates through the resulting domain objects.
+selection.first     # Returns the first result, or nil if there are no results.
+selection.last      # Returns the last result, or nil if there are no results.
+selection.only      # Returns the only result, or nil if there are no results. Raises an exception if there's more than 1 result. (Aliased as `one`.)
+selection.only!     # Returns the only result. Raises an exception if there's not exactly 1 result. (Aliased as `one!`.)
 ~~~
 
 

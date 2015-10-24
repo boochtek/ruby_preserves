@@ -1,3 +1,4 @@
+require "preserves/selection"
 require "preserves/mapping"
 require "preserves/mapper"
 
@@ -17,8 +18,12 @@ module Preserves
     end
 
     def select(sql_string, *params)
-      pg_result = data_store.exec_params(sql_string, params)
-      SQL::ResultSet.new(pg_result)
+      if params && params.last.is_a?(Hash)
+        relations = params.pop
+        Selection.new(map(query(sql_string, *params), relations))
+      else
+        Selection.new(map(query(sql_string, *params)))
+      end
     end
 
     def map(result, relations={})

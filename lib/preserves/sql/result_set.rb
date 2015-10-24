@@ -16,19 +16,6 @@ module Preserves
         @pg_result.each(&block)
       end
 
-      def only
-        fail "expected only 1 result" if size > 1
-        self
-      end
-
-      def only!
-        fail "expected exactly 1 result" if size != 1
-        self
-      end
-
-      alias_method :one, :only
-      alias_method :one!, :only!
-
     end
   end
 end

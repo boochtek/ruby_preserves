@@ -49,21 +49,26 @@ Soonish
 -------
 
 * More coercions.
-    * Move coercions to their own class(es).
+    * Rename to serialize/deserialize.
+    * Move serializers to their own class(es).
         * Or should we use solnic/coercible gem?
-    * Allow a way to specify more type mappings/coercions.
+    * Allow a way to specify more type mappings/serializers.
     	 * Registration?
 * Get default mappings from DB schema.
     * INTEGER
     * DATE
     * TIME
 * Prepared statements.
+    * Can we just prepare every SQL query we run?
+        * Have a cache mapping the SQL query string to the prepared statement.
+            * Would obviously want to make this a LRU cache eventually.
 * Examples of pagination.
 * Be consistent between strings and symbols.
 * Allow strings in place of class names for specifying repositories.
     * Because we'll have circular references for belongs_to/has_many pairs.
     * Or should we not allow that, because it's bad for OOP to have circular dependencies?
         * Or maybe not allow belongs_to at all.
+* Have Selection class lazily do mapping, instead of eagerly in the repository?
 * Unit tests.
     * We currently only have integration/acceptance tests.
 
