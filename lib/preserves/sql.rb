@@ -1,5 +1,5 @@
 require "pg"
-require "preserves/sql/result"
+require "preserves/sql/result_set"
 
 
 module Preserves

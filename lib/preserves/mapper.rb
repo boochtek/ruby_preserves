@@ -32,7 +32,7 @@ module Preserves
             relation_repo = relation_settings.fetch(:repository) # TODO: Need a default.
             relation_foreign_key = relation_settings.fetch(:foreign_key) { "#{mapping.model_class.to_s.downcase}_id" }
             # TODO: Should we remove the foreign key from the result set? I don't think we have to, due to the way we set attributes.
-            relation_results_for_this_object = SQL::Result.new(relation_result.select{|r| r[relation_foreign_key] == record.fetch(mapping.primary_key)}) # TODO: Make each work so we don't need the new here.
+            relation_results_for_this_object = SQL::ResultSet.new(relation_result.select{|r| r[relation_foreign_key] == record.fetch(mapping.primary_key)}) # TODO: Make each work so we don't need the new here.
             object.send("#{relation_name}=", relation_repo.map(relation_results_for_this_object))
           else
             # TODO: Raise an error here, since we're explicitly asking to set this relation.

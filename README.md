@@ -90,7 +90,7 @@ UserRepository = Preserves.repository(model: User) do
   def insert(user)
     result = query("INSERT INTO 'users' (username, name, age) VALUES (?, ?, ?)",
                    user.id, user.name, user.age)
-    raise "Could not insert User #{user.id} into database" unless result.rows == 1
+    raise "Could not insert User #{user.id} into database" unless result.size == 1
   end
 
   def older_than(age)
@@ -126,14 +126,14 @@ Most of the API you'll use will be in the your repository object.
 The mixin provides the following methods:
 
 ~~~ ruby
-query(sql_string)           # Runs SQL and returns a Preserves::SQL::Result.
+query(sql_string)           # Runs SQL and returns a Preserves::SQL::ResultSet.
 select(sql_select_string)   # Runs SQL and returns a Preserves::Selection.
 ~~~
 
-### Preserves::SQL::Result ###
+### Preserves::SQL::ResultSet ###
 
 ~~~ ruby
-result.rows     # Number of rows that were affected by the SQL query.
+result.size     # Number of rows that were affected by the SQL query.
 result.data     # Array of Hashes, for any data returned by the query.
 ~~~
 

@@ -13,12 +13,12 @@ module Preserves
 
     def query(sql_string)
       pg_result = data_store.exec(sql_string)
-      SQL::Result.new(pg_result)
+      SQL::ResultSet.new(pg_result)
     end
 
     def select(sql_string)
       pg_result = data_store.exec(sql_string)
-      SQL::Result.new(pg_result)
+      SQL::ResultSet.new(pg_result)
     end
 
     def map(result, relations={})

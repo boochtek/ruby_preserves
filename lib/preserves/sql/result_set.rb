@@ -1,6 +1,6 @@
 module Preserves
   module SQL
-    class Result
+    class ResultSet
 
       include Enumerable
 
