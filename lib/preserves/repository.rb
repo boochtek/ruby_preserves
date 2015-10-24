@@ -1,10 +1,11 @@
+require "preserves/mapping"
 require "preserves/mapper"
 
 
 module Preserves
   class Repository
+
     attr_accessor :model_class
-    attr_accessor :mapper
 
     def initialize(options={})
       self.model_class = options[:model]
@@ -27,10 +28,14 @@ module Preserves
   protected
 
     def mapping(&block)
-      self.mapper = Mapper.new(self, model_class, &block)
+      @mapping = Mapping.new(self, model_class, &block)
     end
 
   private
+
+    def mapper
+      @mapper ||= Mapper.new(@mapping)
+    end
 
     # NOTE: We'll allow overriding this default on a per-repository basis later.
     def data_store
