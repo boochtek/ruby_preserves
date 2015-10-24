@@ -19,11 +19,26 @@ module Preserves
       domain_objects.first
     end
 
+    def first!
+      fail "expected at least 1 result" if size == 0
+      domain_objects.first
+    end
+
     def second
       domain_objects.second
     end
 
+    def second!
+      fail "expected at least 1 result" if size == 0
+      domain_objects.second
+    end
+
     def last
+      domain_objects.last
+    end
+
+    def last!
+      fail "expected at least 1 result" if size == 0
       domain_objects.last
     end
 

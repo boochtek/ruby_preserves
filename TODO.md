@@ -25,8 +25,6 @@ ASAP
 * Convenience methods.
     * fetch / [] / fetch!
         * To get models by primary key.
-    * first! / last!
-        * To mirror one! (throw exception if the list is empty).
     * insert / update / save / delete
     * create_table
     * scope

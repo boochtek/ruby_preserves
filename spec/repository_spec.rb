@@ -74,6 +74,14 @@ describe "Repository" do
         expect{ selection.only! }.to raise_exception("expected exactly 1 result")
       end
 
+      it "raises an exception when restricting with `first!`" do
+        expect{ selection.first! }.to raise_exception("expected at least 1 result")
+      end
+
+      it "raises an exception when restricting with `last!`" do
+        expect{ selection.last! }.to raise_exception("expected at least 1 result")
+      end
+
     end
 
     describe "when DB has 1 user" do
@@ -98,6 +106,14 @@ describe "Repository" do
 
       it "works when restricting with `only!`" do
         expect(selection.only!.id).to eq("booch")
+      end
+
+      it "works when restricting with `first!`" do
+        expect(selection.first!.id).to eq("booch")
+      end
+
+      it "works when restricting with `last!`" do
+        expect(selection.last!.id).to eq("booch")
       end
     end
 
