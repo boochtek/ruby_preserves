@@ -1,6 +1,8 @@
 module Preserves
   class Selection
 
+    include Enumerable
+
     attr_accessor :domain_objects
 
     def initialize(domain_objects)
