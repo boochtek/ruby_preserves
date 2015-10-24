@@ -13,20 +13,15 @@ Presentation
 ASAP
 ----
 
+* Figure out how ActiveRecord and Sequel do joins.
+    * We're currently doing the join manually.
+        * This is probably OK for reasonably-sized queries.
+        * Because we couldn't figure out how to map the results of SQL JOINs.
+            * The tricky part is sorting out all the result set attributes.
+                * Which attributes belong to the parent, and which to the child?
 * Finish up eager loading stuff.
     * has_many_through
     * belongs_to
-* Move SQL::Result#to_objects to Repository#map, delegating to Mapper#map.
-* Study how ActiveRecord does eager loading (include).
-    * Does a 2nd query with WHERE IN (list of IDs) clause:
-        * SELECT * FROM clients LIMIT 10
-        * SELECT addresses.* FROM addresses WHERE (addresses.client_id IN (1,2,3,4,5,6,7,8,9,10))
-    * http://guides.rubyonrails.org/active_record_querying.html#eager-loading-associations
-* Study how Sequel does eager loading.
-    * Does a 2nd query, creating a UNION of a bunch of nested SELECTs:
-        * SELECT * FROM artists
-        * SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 1)) UNION ALL SELECT * FROM (SELECT * FROM albums WHERE (artist_id = 2))
-    * http://sequel.jeremyevans.net/rdoc/files/doc/advanced_associations_rdoc.html#label-Eager+Loading+via+eager
 * Make placeholders work.
     * Probably just need to change exec to exec_params and use PostgreSQL-style placeholders.
     * Use them in our own code instead of hard-coding or string interpolation.

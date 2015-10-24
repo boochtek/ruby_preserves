@@ -20,8 +20,8 @@ module Preserves
       SQL::Result.new(pg_result)
     end
 
-    def map(result, *options)
-      result.to_objects(mapper, *options)
+    def map(result, relations={})
+      mapper.map_result_to_objects(result, relations)
     end
 
   protected
