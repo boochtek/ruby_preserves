@@ -126,6 +126,8 @@ Most of the API you'll use will be in the your repository object.
 The mixin provides the following methods:
 
 ~~~ ruby
+fetch(id)             # Fetch a single domain model object by its primary key.
+[id]                  # Fetch a single domain model object by its primary key.
 query(sql_string)     # Runs SQL and returns a Preserves::SQL::ResultSet.
 select(sql_string)    # Runs SQL and returns a Preserves::Selection.
 select(sql_string, param1, param2)  # Include bind params for the SQL query.

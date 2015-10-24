@@ -23,8 +23,6 @@ ASAP
     * has_many_through
     * belongs_to
 * Convenience methods.
-    * fetch / [] / fetch!
-        * To get models by primary key.
     * insert / update / save / delete
     * create_table
     * scope
@@ -101,6 +99,7 @@ These can be deferred until after we've proven out the concept.
 * Test for mapping both type and name.
     * Probably already works.
 * Transactions / Unit of Work.
+* Composite keys.
 * Use Mutant for testing.
 * Use a CI service.
 * Use Ruby 2.1 keyword arguments.

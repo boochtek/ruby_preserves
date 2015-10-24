@@ -118,6 +118,7 @@ describe "Repository" do
     end
 
     describe "when DB has 2 users" do
+
       before do
         repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
         repository.query("INSERT INTO users (username, name, age) VALUES ('beth', 'Beth', 39)")
@@ -144,6 +145,15 @@ describe "Repository" do
         expect{ selection.only! }.to raise_exception("expected exactly 1 result")
       end
 
+      it "can fetch the objects by ID" do
+        expect(repository.fetch('booch').class).to eq(User)
+        expect(repository.fetch('booch').age).to eq(43)
+        expect(repository['booch'].class).to eq(User)
+        expect(repository['booch'].age).to eq(43)
+        expect(repository.fetch!('booch').class).to eq(User)
+        expect(repository.fetch!('booch').age).to eq(43)
+        expect{ repository.fetch!('unknown') }.to raise_exception("expected exactly 1 result")
+      end
     end
 
     describe "when mapping a field name to a different model attribute name" do

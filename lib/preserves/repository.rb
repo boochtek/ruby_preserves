@@ -12,6 +12,16 @@ module Preserves
       self.model_class = options[:model]
     end
 
+    def fetch(primary_key_value)
+      select(fetch_query, primary_key_value).only
+    end
+
+    def fetch!(primary_key_value)
+      select(fetch_query, primary_key_value).only!
+    end
+
+    alias_method :[], :fetch
+
     def query(sql_string, *params)
       pg_result = data_store.exec_params(sql_string, params)
       SQL::ResultSet.new(pg_result)
@@ -33,7 +43,7 @@ module Preserves
   protected
 
     def mapping(&block)
-      @mapping = Mapping.new(self, model_class, &block)
+      @mapping ||= Mapping.new(self, model_class, &block)
     end
 
   private
@@ -45,6 +55,10 @@ module Preserves
     # NOTE: We'll allow overriding this default on a per-repository basis later.
     def data_store
       Preserves.data_store
+    end
+
+    def fetch_query
+      "SELECT * FROM \"#{mapping.table_name}\" WHERE #{mapping.primary_key} = $1"
     end
 
   end
