@@ -11,13 +11,13 @@ module Preserves
       self.model_class = options[:model]
     end
 
-    def query(sql_string)
-      pg_result = data_store.exec(sql_string)
+    def query(sql_string, *params)
+      pg_result = data_store.exec_params(sql_string, params)
       SQL::ResultSet.new(pg_result)
     end
 
-    def select(sql_string)
-      pg_result = data_store.exec(sql_string)
+    def select(sql_string, *params)
+      pg_result = data_store.exec_params(sql_string, params)
       SQL::ResultSet.new(pg_result)
     end
 

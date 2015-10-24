@@ -22,11 +22,6 @@ ASAP
 * Finish up eager loading stuff.
     * has_many_through
     * belongs_to
-* Make placeholders work.
-    * Probably just need to change exec to exec_params and use PostgreSQL-style placeholders.
-    * Use them in our own code instead of hard-coding or string interpolation.
-    * conn.exec_params('SELECT $1, $2, $3', [1, 2, nil])
-    * Don't forget to update README.
 * Convenience methods.
     * only (better matches with first/second/last) / only!
         * Rename one/one!, but keep aliases to those old names.

@@ -88,17 +88,17 @@ UserRepository = Preserves.repository(model: User) do
 
   # We'll likely provide `insert`, but this gives an idea of how minimal we'll be to start off.
   def insert(user)
-    result = query("INSERT INTO 'users' (username, name, age) VALUES (?, ?, ?)",
+    result = query("INSERT INTO 'users' (username, name, age) VALUES ($1, $2, $3)",
                    user.id, user.name, user.age)
     raise "Could not insert User #{user.id} into database" unless result.size == 1
   end
 
   def older_than(age)
-    map(select("SELECT *, username AS id FROM 'users' WHERE age > ? ORDER BY ?", age, :name))
+    map(select("SELECT *, username AS id FROM 'users' WHERE age > $1 ORDER BY $2", age, :name))
   end
 
   def with_id(id)
-    map(select("SELECT *, username AS id FROM 'users' WHERE username = ?", id))
+    map(select("SELECT *, username AS id FROM 'users' WHERE username = $1", id))
   end
 end
 ~~~

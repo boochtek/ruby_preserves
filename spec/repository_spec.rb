@@ -45,7 +45,7 @@ describe "Repository" do
   subject(:repository) { UserRepository }
 
   describe "executing a query" do
-    let(:query) { repository.query("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)") }
+    let(:query) { repository.query("INSERT INTO users (username, name, age) VALUES ($1, $2, $3)", 'booch', 'Craig', 43) }
 
     # This can't be done with let(), because we don't want to cache it.
     def number_of_rows_in_user_table
