@@ -94,11 +94,11 @@ UserRepository = Preserves.repository(model: User) do
   end
 
   def older_than(age)
-    map(select("SELECT *, username AS id FROM 'users' WHERE age > $1 ORDER BY $2", age, :name))
+    select("SELECT *, username AS id FROM 'users' WHERE age > $1 ORDER BY $2", age, :name)
   end
 
   def with_id(id)
-    map(select("SELECT *, username AS id FROM 'users' WHERE username = $1", id))
+    select("SELECT *, username AS id FROM 'users' WHERE username = $1", id)
   end
 end
 ~~~
