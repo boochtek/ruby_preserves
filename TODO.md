@@ -5,7 +5,8 @@ TODO
 Presentation
 ------------
 
-* Create the short URL. (NO UNDERSCORES)
+* Create the short URL. (NO UNDERSCORES on TinyURL)
+    * http://craigbuchek.com/ruby-preserves-rubyconf
     * http://tinyurl.com/ruby-preserves-rubyconf
     * https://rawgit.com/booch/presentations/Ruby_Preserves-RubyConf-2015-11-15/Ruby_Preserves/slides.html
 
@@ -13,19 +14,27 @@ Presentation
 ASAP
 ----
 
+* Fix unused `database_field_name` in Mapping#map.
+* Clean up Mapper#map_record_to_object.
+    * Rename it as map_one.
+    * Rename map_result_to_objects as map.
+* Unit test pluralize.
+    * Will have to move it to its own file and make it public.
+* Clean up the rest of Mapper.
+* Saving.
+    * insert / update / save / delete
+* Convenience methods.
+    * create_table
+    * scope
+* Finish up eager loading stuff.
+    * has_many_through
+    * belongs_to
 * Figure out how ActiveRecord and Sequel do joins.
     * We're currently doing the join manually.
         * This is probably OK for reasonably-sized queries.
         * Because we couldn't figure out how to map the results of SQL JOINs.
             * The tricky part is sorting out all the result set attributes.
                 * Which attributes belong to the parent, and which to the child?
-* Finish up eager loading stuff.
-    * has_many_through
-    * belongs_to
-* Convenience methods.
-    * insert / update / save / delete
-    * create_table
-    * scope
 * Show how to use a different repository for tests, if necessary.
     * Like an in-memory repository.
     * I assume we'd have to use a completely different repository.
@@ -45,6 +54,8 @@ Soonish
 -------
 
 * More coercions.
+    * Boolean
+    * Date
     * Rename to serialize/deserialize.
     * Move serializers to their own class(es).
         * Or should we use solnic/coercible gem?
@@ -60,10 +71,14 @@ Soonish
             * Would obviously want to make this a LRU cache eventually.
 * Examples of pagination.
 * Be consistent between strings and symbols.
+* Can we initialize the domain model objects, instead of using setters?
+    * Would initialize with a Hash of attributes and values.
+    * Might allow both variants, to work with different kinds of classes.
 * Allow strings in place of class names for specifying repositories.
     * Because we'll have circular references for belongs_to/has_many pairs.
     * Or should we not allow that, because it's bad for OOP to have circular dependencies?
         * Or maybe not allow belongs_to at all.
+* Better exceptions -- add some Exception classes.
 * Have Selection class lazily do mapping, instead of eagerly in the repository?
 * Unit tests.
     * We currently only have integration/acceptance tests.
@@ -98,6 +113,7 @@ These can be deferred until after we've proven out the concept.
         * Does it make sense to have these in the database?
 * Test for mapping both type and name.
     * Probably already works.
+* Is there a way we could do lazy loading of associations?
 * Transactions / Unit of Work.
 * Composite keys.
 * Use Mutant for testing.
