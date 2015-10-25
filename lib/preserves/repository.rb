@@ -34,10 +34,11 @@ module Preserves
       else
         Selection.new(map(query(sql_string, *params)))
       end
+      Selection.new(map(query(sql_string, *params), relations))
     end
 
     def map(result, relations={})
-      mapper.map_result_to_objects(result, relations)
+      mapper.map(result, relations)
     end
 
   protected

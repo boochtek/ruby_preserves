@@ -12,9 +12,9 @@ module Preserves
       self.mapping = mapping
     end
 
-    def map_result_to_objects(result, relations={})
+    def map(result, relations={})
       result.map do |record|
-        map_record_to_object(record, relations)
+        map_one_record(record, relations)
       end
     end
 
@@ -46,7 +46,7 @@ module Preserves
 
     # TODO: This obviously needs a lot of refactoring.
     # TODO: Don't throw exceptions inside iterations; check things before the iterations.
-    def map_record_to_object(record, relations={})
+    def map_one_record(record, relations={})
       object = mapping.model_class.new
       record.each_pair do |column_name, field_value|
         attribute_name = column_name_to_attribute_name(column_name)

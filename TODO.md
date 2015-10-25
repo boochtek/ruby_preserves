@@ -16,8 +16,6 @@ ASAP
 
 * Fix unused `database_field_name` in Mapping#map.
 * Clean up Mapper#map_record_to_object.
-    * Rename it as map_one.
-    * Rename map_result_to_objects as map.
 * Unit test pluralize.
     * Will have to move it to its own file and make it public.
 * Clean up the rest of Mapper.
