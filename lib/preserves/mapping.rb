@@ -43,7 +43,6 @@ module Preserves
         self.name_mappings[database_field_name] = model_attribute_name
       elsif args[0].is_a?(Symbol)
         model_attribute_name = args[0]
-        database_field_name = args[0].to_s
       end
 
       if args[1].is_a?(Class)
