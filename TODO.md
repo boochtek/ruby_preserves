@@ -23,7 +23,6 @@ ASAP
     * scope
 * Finish up eager loading stuff.
     * has_many_through
-    * belongs_to
 * Figure out how ActiveRecord and Sequel do joins.
     * We're currently doing the join manually.
         * This is probably OK for reasonably-sized queries.

@@ -40,7 +40,9 @@ module Preserves
       mapper.map(result, relations)
     end
 
-  protected
+    def map_one(result, relations={})
+      mapper.map_one(result, relations)
+    end
 
     def mapping(&block)
       @mapping ||= Mapping.new(self, model_class, &block)

@@ -2,6 +2,7 @@
 
 require "preserves/mapping"
 require "preserves/mapper/has_many"
+require "preserves/mapper/belongs_to"
 
 
 module Preserves
@@ -15,7 +16,14 @@ module Preserves
 
     def map(result, relations={})
       result.map do |record|
-        map_one_record(record, relations)
+        map_one(record, relations)
+      end
+    end
+
+    def map_one(record, relations={})
+      mapping.model_class.new.tap do |object|
+        map_attributes(object, record)
+        map_relations(object, record, relations)
       end
     end
 
@@ -26,13 +34,6 @@ module Preserves
     end
 
   private
-
-    def map_one_record(record, relations={})
-      mapping.model_class.new.tap do |object|
-        map_attributes(object, record)
-        map_relations(object, record, relations)
-      end
-    end
 
     def map_attributes(object, record)
       record.each_pair do |column_name, field_value|
@@ -62,20 +63,25 @@ module Preserves
     end
 
     def map_relations(object, record, relations)
-      has_many_relations = relations # TODO: Filter only those in the mapping.has_many_mappings hash.
+      has_many_relations = relations.select{ |k, _v| mapping.has_many_mappings.keys.include?(k) }
       map_has_many_relations(object, record, has_many_relations)
+      belongs_to_relations = relations.select{ |k, _v| mapping.belongs_to_mappings.keys.include?(k) }
+      map_belongs_to_relations(object, record, belongs_to_relations)
       # TODO: Raise an exception if any of the relations weren't found in any of the relation mappings.
     end
 
     def map_has_many_relations(object, record, relations)
       # TODO: Ensure that there's a setter for every relation_name before we iterate through the relations.
       relations.each do |relation_name, relation_result_set|
-        map_has_many_relation(object, record, relation_name, relation_result_set)
+        Mapper::HasMany.new(object, record, relation_name, relation_result_set, mapping).map!
       end
     end
 
-    def map_has_many_relation(object, record, relation_name, relation_result_set)
-      Mapper::HasMany.new(object, record, relation_name, relation_result_set, mapping).map!
+    def map_belongs_to_relations(object, record, relations)
+      # TODO: Ensure that there's a setter for every relation_name before we iterate through the relations.
+      relations.each do |relation_name, relation_result_set|
+        Mapper::BelongsTo.new(object, record, relation_name, relation_result_set, mapping).map!
+      end
     end
 
     def coerce(field_value, options={})
