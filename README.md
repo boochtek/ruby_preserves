@@ -150,11 +150,11 @@ Most of your interactions with Selections will be through the Enumerable interfa
 
 ~~~ ruby
 selection.each      # Iterates through the resulting domain objects.
-selection.first     # Returns the first result, or nil if there are no results.
+selection.first     # Returns the first result. Returns nil if there are no results.
 selection.first!    # Returns the first result. Raises an exception if there are no results.
-selection.last      # Returns the last result, or nil if there are no results.
+selection.last      # Returns the last result. Returns nil if there are no results.
 selection.last!     # Returns the last result. Raises an exception if there are no results.
-selection.only      # Returns the only result, or nil if there are no results. Raises an exception if there's more than 1 result. (Aliased as `one`.)
+selection.only      # Returns the only result. Returns nil if there are no results. Raises an exception if there's more than 1 result. (Aliased as `one`.)
 selection.only!     # Returns the only result. Raises an exception if there's not exactly 1 result. (Aliased as `one!`.)
 ~~~
 
