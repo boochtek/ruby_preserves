@@ -14,30 +14,19 @@ Presentation
 ASAP
 ----
 
-* Unit test pluralize.
-    * Will have to move it to its own file and make it public.
+* README: Document has_many and belongs_to.
+    * Advise to avoid belongs_to mappings, if possible.
+        * Especially don't want circular dependencies.
+* README: Show an example of pagination.
+* README: Show how to use a different repository for tests, if necessary.
+    * Since we require SQL, we can't really do in-memory.
+        * So the repository would not be a Preserves repository.
 * Saving.
+    * Not sure if we should just have subclasses use query().
+        * I'm starting to lean that way.
+        * We probably have all the info we need to build the INSERT programmatically.
+            * But that would violate our "just use SQL everywhere" mantra.
     * insert / update / save / delete
-* Convenience methods.
-    * create_table
-    * scope
-* Finish up eager loading stuff.
-    * has_many_through
-* Figure out how ActiveRecord and Sequel do joins.
-    * We're currently doing the join manually.
-        * This is probably OK for reasonably-sized queries.
-        * Because we couldn't figure out how to map the results of SQL JOINs.
-            * The tricky part is sorting out all the result set attributes.
-                * Which attributes belong to the parent, and which to the child?
-* Show how to use a different repository for tests, if necessary.
-    * Like an in-memory repository.
-    * I assume we'd have to use a completely different repository.
-        * Since we require SQL, we can't really do in-memory.
-* Show examples using foreign keys and PostgreSQL arrays.
-    * Probably advise NOT to do belongs_to mappings.
-* has_many :through
-    * Allow, but don't require, join table to have an associated Repository object.
-    * Use AR syntax, but store them separately in Mapper.
 * Preserves.repository() should return a module to mix in, and not take a block.
     * And should not be singletons.
         * Might use method_missing on class to allow usage as if it's a singleton.
@@ -47,6 +36,9 @@ ASAP
 Soonish
 -------
 
+* Convenience methods.
+    * create_table
+    * scope
 * More coercions.
     * Boolean
     * Date
@@ -63,36 +55,32 @@ Soonish
     * Can we just prepare every SQL query we run?
         * Have a cache mapping the SQL query string to the prepared statement.
             * Would obviously want to make this a LRU cache eventually.
-* Examples of pagination.
-* Clean Mapper a bit more.
+* Ensure we can use PostgreSQL arrays.
 * Be consistent between strings and symbols.
 * Can we initialize the domain model objects, instead of using setters?
     * Would initialize with a Hash of attributes and values.
     * Might allow both variants, to work with different kinds of classes.
+    * Would need a way to know if the model class supports the initializer we'd be using.
 * Allow strings in place of class names for specifying repositories.
     * Because we'll have circular references for belongs_to/has_many pairs.
     * Or should we not allow that, because it's bad for OOP to have circular dependencies?
-        * Or maybe not allow belongs_to at all.
 * Better exceptions -- add some Exception classes.
 * Have Selection class lazily do mapping, instead of eagerly in the repository?
 * Unit tests.
     * We currently only have integration/acceptance tests.
-
-
-Deferred
---------
-
-These can be deferred until after we've proven out the concept.
-
+    * Pluralize.
+        * Will have to move it to its own file and make it public.
+* Add has_many :through relations.
+    * Might already work with the existing code, and just need testing.
+    * Allow, but don't require, join table to have an associated Repository object.
+    * Use ActiveRecord syntax, but store them separately in Mapper.
 * Should we catch exceptions from the DB?
     * Should we reraise them with our own exception class?
     * Should we swallow them?
 * Cleanup.
-    * Setting up DB in spec_helper is terrible.
+    * Clean up Mapper a bit more.
+    * Setting up the DB in spec_helper is terrible.
         * At least move it to a separate file.
-    * Should Repository#query and #select be protected?
-        * We're using #select in Mapper#add_has_many_proxies.
-            * We could make a separate public method for him to use.
 * Better documentation.
     * README isn't great at explaining how to use it.
     * Should make recommendations on how to use this.
