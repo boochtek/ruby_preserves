@@ -8,32 +8,32 @@ We're trying to answer these questions:
 
 * How simple can we make an ORM that is still useful?
 * Developers have to know SQL anyway, so why try to hide the SQL from them?
-  * Is the complexity of a typical ORM really better than the complexity of SQL?
+    * Is the complexity of a typical ORM really better than the complexity of SQL?
 * ORMs are a leaky abstraction. What if we made it so leaky that it doesn't matter?
 
 This ORM is based on a few strong opinions:
 
 * The Data Mapper pattern is generally better than the Active Record pattern.
-  * Unless you're just writing a CRUD front-end, with little interesting behavior.
+    * Unless you're just writing a CRUD front-end, with little interesting behavior.
 * Declaring attributes in the domain model is better than hiding them elsewhere.
-  * Declaring relationships in one place and attributes in another is true madness.
+    * Declaring relationships in one place and attributes in another is true madness.
 * NoSQL as a main data store is usually misguided.
-  * PostgreSQL can do just about anything you need, using SQL.
+    * PostgreSQL can do just about anything you need, using SQL.
 * Projects are unlikely to need to abstract SQL to allow them to use different RDBMSes.
-  * Developer workstations are fast enough to run "full" RDBMSes.
-  * If you're not using "interesting" features, then you're probably using "standard" SQL.
+    * Developer workstations are fast enough to run "full" RDBMSes.
+    * If you're not using "interesting" features, then you're probably using "standard" SQL.
 
 The Data Mapper pattern provides several advantages:
 
 * Domain objects don't have to know anything about the database or its schema.
-  * Instead, the mapper knows about the domain objects and the database.
-    * DB schema can change without having to change to domain objects; only the mapper changes.
+    * Instead, the mapper knows about the domain objects and the database.
+        * DB schema can change without having to change to domain objects; only the mapper changes.
 * The domain objects are self-contained.
-  * Don't have to look elsewhere to understand everything a class contains.
+    * Don't have to look elsewhere to understand everything a class contains.
 * Better meets the Single Responsibility Principle (SRP).
-  * Domain model classes handle business logic.
-  * Repository classes handle persistence.
-  * Mapper classes handle mapping database fields to object attributes.
+    * Domain model classes handle business logic.
+    * Repository classes handle persistence.
+    * Mapper classes handle mapping database fields to object attributes.
 
 It's been pointed out that Preserves might not in fact even be an ORM, because it doesn't have a complete model of the relations between objects.
 
@@ -57,8 +57,8 @@ Or install it yourself as:
 Example Usage
 -------------
 
-First, create your domain model class. You can use a Struct, an
-OStruct, a Virtus model, or a plain old Ruby object (PORO) class.
+First, create your domain model class. You can use a [Struct], an
+[OpenStruct], a [Virtus] model, or a plain old Ruby object (PORO) class.
 We'll use a Struct in the examples, so we can initialize the fields easily.
 
 ~~~ ruby
@@ -170,6 +170,9 @@ Contributing
 6. Create a new [pull request].
 
 
+[Struct]: http://ruby-doc.org/core-2.2.0/Struct.html
+[OpenStruct]: http://ruby-doc.org/stdlib-2.2.0/libdoc/ostruct/rdoc/OpenStruct.html
+[Virtus]: https://github.com/solnic/virtus#readme
+
 [project repo]: https://github.com/boochtek/ruby_preserves/fork
 [pull request]: https://github.com/boochtek/ruby_preserves/pulls
-[Virtus]: https://github.com/solnic/virtus#readme
