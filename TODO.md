@@ -14,7 +14,6 @@ Presentation
 ASAP
 ----
 
-* Clean up Mapper#map_record_to_object.
 * Unit test pluralize.
     * Will have to move it to its own file and make it public.
 * Clean up the rest of Mapper.
