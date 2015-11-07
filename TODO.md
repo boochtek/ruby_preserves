@@ -16,7 +16,6 @@ ASAP
 
 * Unit test pluralize.
     * Will have to move it to its own file and make it public.
-* Clean up the rest of Mapper.
 * Saving.
     * insert / update / save / delete
 * Convenience methods.
@@ -66,6 +65,7 @@ Soonish
         * Have a cache mapping the SQL query string to the prepared statement.
             * Would obviously want to make this a LRU cache eventually.
 * Examples of pagination.
+* Clean Mapper a bit more.
 * Be consistent between strings and symbols.
 * Can we initialize the domain model objects, instead of using setters?
     * Would initialize with a Hash of attributes and values.
@@ -85,6 +85,9 @@ Deferred
 
 These can be deferred until after we've proven out the concept.
 
+* Should we catch exceptions from the DB?
+    * Should we reraise them with our own exception class?
+    * Should we swallow them?
 * Cleanup.
     * Setting up DB in spec_helper is terrible.
         * At least move it to a separate file.
@@ -109,6 +112,19 @@ These can be deferred until after we've proven out the concept.
         * Does it make sense to have these in the database?
 * Test for mapping both type and name.
     * Probably already works.
+* Fit into ActiveModel.
+    * Would require picking one base class for models.
+        * Would lose the ability to use POROs (at least when using ActiveModel).
+    * Would require mutual dependencies.
+        * The model will have to call to the repo to persist itself.
+        * The repo will need to know about the model.
+            * Maybe there's a way to actually break this, since our mapping doesn't need it immediately.
+    * Would require also including a validation layer (I think).
+* Connection pooling.
+* Is there a way we could do dirty tracking/updating?
+    * This would require some help from the model.
+        * So we'd probably make it optional, depending on whether the model supports it.
+* Is there a way we could do optimistic locking?
 * Is there a way we could do lazy loading of associations?
 * Transactions / Unit of Work.
 * Composite keys.
