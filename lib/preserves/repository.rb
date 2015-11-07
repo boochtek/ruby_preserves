@@ -30,9 +30,8 @@ module Preserves
     def select(sql_string, *params)
       if params && params.last.is_a?(Hash)
         relations = params.pop
-        Selection.new(map(query(sql_string, *params), relations))
       else
-        Selection.new(map(query(sql_string, *params)))
+        relations = {}
       end
       Selection.new(map(query(sql_string, *params), relations))
     end
