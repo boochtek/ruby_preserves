@@ -22,6 +22,20 @@ module Preserves
 
     alias_method :[], :fetch
 
+    def map(result, relations={})
+      mapper.map(result, relations)
+    end
+
+    def map_one(result, relations={})
+      mapper.map_one(result, relations)
+    end
+
+    def mapping(&block)
+      @mapping ||= Mapping.new(self, model_class, &block)
+    end
+
+  protected
+
     def query(sql_string, *params)
       pg_result = data_store.exec_params(sql_string, params)
       SQL::ResultSet.new(pg_result)
@@ -34,18 +48,6 @@ module Preserves
         relations = {}
       end
       Selection.new(map(query(sql_string, *params), relations))
-    end
-
-    def map(result, relations={})
-      mapper.map(result, relations)
-    end
-
-    def map_one(result, relations={})
-      mapper.map_one(result, relations)
-    end
-
-    def mapping(&block)
-      @mapping ||= Mapping.new(self, model_class, &block)
     end
 
   private
