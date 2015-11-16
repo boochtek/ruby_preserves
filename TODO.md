@@ -1,14 +1,22 @@
 TODO
 ====
 
-
 Presentation
 ------------
 
-* Create the short URL. (NO UNDERSCORES on TinyURL)
-    * http://craigbuchek.com/ruby-preserves-rubyconf
-    * http://tinyurl.com/ruby-preserves-rubyconf
-    * https://rawgit.com/booch/presentations/Ruby_Preserves-RubyConf-2015-11-15/Ruby_Preserves/slides.html
+* Add my avatar to the About page
+* Split the Data Mapper Pattern slide into 3
+* Add DHH slide on word "CRUD"
+* Slide on what's missing on purpose (and why)
+    * Validations
+    * Migrations
+* UML diagram for Repository Architecture?
+    * Replace the bullet point slide?
+* Show a Virtus model example
+    * Since I'm now the primary maintainer
+* Remove bullets on single-bullet slides?
+
+
 
 
 ASAP
@@ -39,6 +47,7 @@ Soonish
 * Convenience methods.
     * create_table
     * scope
+* Don't require `model` keyword in Repository initializer (suggested by @jeg2).
 * More coercions.
     * Boolean
     * Date
@@ -56,7 +65,10 @@ Soonish
         * Have a cache mapping the SQL query string to the prepared statement.
             * Would obviously want to make this a LRU cache eventually.
 * Ensure we can use PostgreSQL arrays.
+* Example using PostgreSQL's new UPSERT feature.
 * Be consistent between strings and symbols.
+* Transactions.
+    * Probably needs some support in the ORM.
 * Can we initialize the domain model objects, instead of using setters?
     * Would initialize with a Hash of attributes and values.
     * Might allow both variants, to work with different kinds of classes.
