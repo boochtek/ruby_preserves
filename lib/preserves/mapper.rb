@@ -45,7 +45,7 @@ module Preserves
     end
 
     def column_name_to_attribute_name(column_name)
-      mapping.name_mappings.fetch(column_name) { column_name }
+      mapping.name_mappings.fetch(column_name.to_sym) { column_name }
     end
 
     def field_value_to_attribute_value(attribute_name, field_value)
