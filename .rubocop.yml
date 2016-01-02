@@ -1,0 +1,61 @@
+Style/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+
+Style/EmptyLinesAroundModuleBody:
+  EnforcedStyle: empty_lines
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Metrics/LineLength:
+  Max: 120
+
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Style/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Style/TrailingBlankLines:
+  EnforcedStyle: final_newline
+
+Style/EmptyLines:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  ()
+    '%i': ()
+    '%q': '{}'
+    '%Q': '{}'
+    '%r': '{}'
+    '%s': ()
+    '%w': '[]'
+    '%W': '[]'
+    '%x': '[]'
+
+Style/SpaceBeforeBlockBraces:
+  Enabled: false
+
+Style/PredicateName:
+  NameWhitelist:
+    - has_many  
+
