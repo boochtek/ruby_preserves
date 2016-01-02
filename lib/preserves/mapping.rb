@@ -38,8 +38,8 @@ module Preserves
 
     def map(*args)
       if args[0].is_a?(Hash)
-        database_field_name = args[0].values.first
-        model_attribute_name = args[0].keys.first
+        database_field_name = args[0].values.first.to_sym
+        model_attribute_name = args[0].keys.first.to_sym
         self.name_mappings[database_field_name] = model_attribute_name
       elsif args[0].is_a?(Symbol)
         model_attribute_name = args[0]
