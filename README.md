@@ -83,6 +83,7 @@ in the database. (These will mostly be like ActiveRecord scopes.)
 UserRepository = Preserves.repository(model: User) do
   mapping do
     map id: 'username'  # The database field named 'username' corresponds to the 'id' attribute in the model.
+    map :name
     map :age, Integer   # The 'age' field should be mapped to an Integer in the model.
   end
 
