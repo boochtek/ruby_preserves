@@ -1,15 +1,13 @@
 Preserves
 =========
 
-Preserves is a minimalist ORM (object-relational mapper) for Ruby, using the
-Repository and Data Mapper patterns.
+Preserves is a minimalist ORM (object-relational mapper) for Ruby,
+using the Data Mapper pattern instead of the Active Record pattern.
+It's built atop Jeremy Evans' excellent [Sequel] library.
 
-We're trying to answer these questions:
+We're trying to answer this question:
 
 * How simple can we make an ORM that is still useful?
-* Developers have to know SQL anyway, so why try to hide the SQL from them?
-    * Is the complexity of a typical ORM really better than the complexity of SQL?
-* ORMs are a leaky abstraction. What if we made it so leaky that it doesn't matter?
 
 This ORM is based on a few strong opinions:
 
@@ -17,11 +15,6 @@ This ORM is based on a few strong opinions:
     * Unless you're just writing a CRUD front-end, with little interesting behavior.
 * Declaring attributes in the domain model is better than hiding them elsewhere.
     * Declaring relationships in one place and attributes in another is true madness.
-* NoSQL as a main data store is usually misguided.
-    * PostgreSQL can do just about anything you need, using SQL.
-* Projects are unlikely to need to abstract SQL to allow them to use different RDBMSes.
-    * Developer workstations are fast enough to run "full" RDBMSes.
-    * If you're not using "interesting" features, then you're probably using "standard" SQL.
 
 The Data Mapper pattern provides several advantages:
 
@@ -34,8 +27,6 @@ The Data Mapper pattern provides several advantages:
     * Domain model classes handle business logic.
     * Repository classes handle persistence.
     * Mapper classes handle mapping database fields to object attributes.
-
-It's been pointed out that Preserves might not in fact even be an ORM, because it doesn't have a complete model of the relations between objects.
 
 
 Installation
@@ -66,13 +57,14 @@ User = Struct.new(:id, :name, :age) do
 end
 ~~~
 
-Next, configure the Preserves data store.
+Next, configure the Sequel data store.
 
 ~~~ ruby
-Preserves.data_store = Preserves::PostgreSQL("my_database")
+DB = Sequel.connect('postgres://user:password@localhost/my_db')
 ~~~
 
-Then create a repository linked to the domain model class.
+Then create a repository linked to the domain model class
+and the Sequel dataset.
 By default, all attributes will be assumed to be Strings.
 For other attribute types, you'll need to supply the mapping.
 (We'll have some default mappings determined from the DB or model later.)
@@ -80,26 +72,21 @@ Your repository should then define methods to access model objects
 in the database. (These will mostly be like ActiveRecord scopes.)
 
 ~~~ ruby
-UserRepository = Preserves.repository(model: User) do
+UserRepository = Preserves.repository(model: User, dataset: DB[:users]) do
+
+  # Declare how to map items in the dataset to objects in our class.
   mapping do
     map id: 'username'  # The database field named 'username' corresponds to the 'id' attribute in the model.
     map :name
     map :age, Integer   # The 'age' field should be mapped to an Integer in the model.
   end
 
-  # We'll likely provide `insert`, but this gives an idea of how minimal we'll be to start off.
-  def insert(user)
-    result = query("INSERT INTO 'users' (username, name, age) VALUES ($1, $2, $3)",
-                   user.id, user.name, user.age)
-    raise "Could not insert User #{user.id} into database" unless result.size == 1
+  def older_than(minimum_age)
+    map(dataset.where('age >= :minimum_age', minimum_age: minimum_age))
   end
 
-  def older_than(age)
-    select("SELECT *, username AS id FROM 'users' WHERE age > $1 ORDER BY $2", age, :name)
-  end
-
-  def with_id(id)
-    select("SELECT *, username AS id FROM 'users' WHERE username = $1", id)
+  def with_name(name)
+    map(dataset.where(name: name))
   end
 end
 ~~~
@@ -111,14 +98,15 @@ retrieve them from the database:
 craig = User.new("booch", "Craig", 42)
 UserRepository.insert(craig)
 users_over_40 = UserRepository.older_than(40)   # Returns an Enumerable set of User objects.
-beth = UserRepository.with_id("beth").one       # Returns a single User object or nil.
+beth = UserRepository.with_name("Beth").one     # Returns a single User object or nil.
 ~~~
 
 
 API Summary
 -----------
 
-NOTE: This project is in very early exploratory stages. The API **will** change.
+NOTE: This project is in very early exploratory stages.
+The API **will** change.
 
 
 ### Repository ###
@@ -127,19 +115,13 @@ Most of the API you'll use will be in the your repository object.
 The mixin provides the following methods:
 
 ~~~ ruby
+map_one               # Map one item (hash) from a Sequel dataset to an object.
+map                   # Map a Sequel dataset to a Selection (collection of objects).
+dataset               # Sequel dataset for all objects.
+insert(object)        # Insert object into the database.
 fetch(id)             # Fetch a single domain model object by its primary key.
 [id]                  # Fetch a single domain model object by its primary key.
-query(sql_string)     # Runs SQL and returns a Preserves::SQL::ResultSet.
-select(sql_string)    # Runs SQL and returns a Preserves::Selection.
-select(sql_string, param1, param2)  # Include bind params for the SQL query.
-select(sql_string, association_name: sql_result)  # Include associations.
-~~~
-
-
-### Preserves::SQL::ResultSet ###
-
-~~~ ruby
-result.size     # Number of rows that were affected by the SQL query.
+all                   # Alias for `map(dataset)`.
 ~~~
 
 
@@ -171,6 +153,7 @@ Contributing
 6. Create a new [pull request].
 
 
+[Sequel]: http://sequel.jeremyevans.net/
 [Struct]: http://ruby-doc.org/core-2.2.0/Struct.html
 [OpenStruct]: http://ruby-doc.org/stdlib-2.2.0/libdoc/ostruct/rdoc/OpenStruct.html
 [Virtus]: https://github.com/solnic/virtus#readme
