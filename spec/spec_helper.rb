@@ -1,24 +1,25 @@
 require "rspec"
+require "sequel"
 
 
 $LOAD_PATH.push(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
 require "preserves"
 
 
-Preserves.data_store = Preserves.PostgreSQL("preserves_test")
+DB = Sequel.connect('postgres://localhost/preserves_test')
 
 
-def setup_db(db)
-  db.exec("DROP TABLE IF EXISTS groups")
-  db.exec("DROP TABLE IF EXISTS users")
-  db.exec("DROP TABLE IF EXISTS addresses")
-  db.exec("CREATE TABLE groups (id INTEGER NOT NULL,
+def setup_db
+  DB.run("DROP TABLE IF EXISTS groups")
+  DB.run("DROP TABLE IF EXISTS users")
+  DB.run("DROP TABLE IF EXISTS addresses")
+  DB.run("CREATE TABLE groups (id INTEGER NOT NULL,
                                 name VARCHAR(255) NOT NULL)")
-  db.exec("CREATE TABLE users (username VARCHAR(255) NOT NULL,
+  DB.run("CREATE TABLE users (username VARCHAR(255) NOT NULL,
                                name VARCHAR(255),
                                age INTEGER,
                                group_id INTEGER)")
-  db.exec("CREATE TABLE addresses (city VARCHAR(255) NOT NULL,
+  DB.run("CREATE TABLE addresses (city VARCHAR(255) NOT NULL,
                                    username VARCHAR(255) NOT NULL)")
 end
 
@@ -107,14 +108,13 @@ RSpec.configure do |config|
   end
 =end
 
-  db = Preserves.data_store
-
-  setup_db(db)
+  setup_db
 
   config.around do |example|
-    db.exec("BEGIN")
-    example.run
-    db.exec("ROLLBACK")
+    DB.transaction do
+      example.run
+      fail(Sequel::Rollback)
+    end
   end
 
 end
