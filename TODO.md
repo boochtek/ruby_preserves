@@ -1,39 +1,17 @@
 TODO
 ====
 
-Presentation
-------------
-
-* Add my avatar to the About page
-* Split the Data Mapper Pattern slide into 3
-* Add DHH slide on word "CRUD"
-* Slide on what's missing on purpose (and why)
-    * Validations
-    * Migrations
-* UML diagram for Repository Architecture?
-    * Replace the bullet point slide?
-* Show a Virtus model example
-    * Since I'm now the primary maintainer
-* Remove bullets on single-bullet slides?
-
-
-
 
 ASAP
 ----
 
+* Sequel has_many and belongs_to.
 * README: Document has_many and belongs_to.
     * Advise to avoid belongs_to mappings, if possible.
         * Especially don't want circular dependencies.
 * README: Show an example of pagination.
 * README: Show how to use a different repository for tests, if necessary.
-    * Since we require SQL, we can't really do in-memory.
-        * So the repository would not be a Preserves repository.
 * Saving.
-    * Not sure if we should just have subclasses use query().
-        * I'm starting to lean that way.
-        * We probably have all the info we need to build the INSERT programmatically.
-            * But that would violate our "just use SQL everywhere" mantra.
     * insert / update / save / delete
 * Preserves.repository() should return a module to mix in, and not take a block.
     * And should not be singletons.
@@ -61,11 +39,9 @@ Soonish
     * DATE
     * TIME
 * Prepared statements.
-    * Can we just prepare every SQL query we run?
-        * Have a cache mapping the SQL query string to the prepared statement.
-            * Would obviously want to make this a LRU cache eventually.
+    * Can we just prepare every Sequel query we run?
+        * Would obviously want to make this a LRU cache eventually.
 * Ensure we can use PostgreSQL arrays.
-* Example using PostgreSQL's new UPSERT feature.
 * Be consistent between strings and symbols.
 * Transactions.
     * Probably needs some support in the ORM.
@@ -130,5 +106,4 @@ Soonish
 * Use Mutant for testing.
 * Use a CI service.
 * Use Ruby 2.1 keyword arguments.
-* Use cursors.
 * Performance testing.
