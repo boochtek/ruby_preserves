@@ -1,18 +1,19 @@
 Preserves
 =========
 
-Preserves is a minimalist ORM (object-relational mapper) for Ruby,
+Preserves is an ORM (object-relational mapper) for Ruby,
 using the Data Mapper pattern instead of the Active Record pattern.
 It's built atop Jeremy Evans' excellent [Sequel] library.
 
-We're trying to answer this question:
-
-* How simple can we make an ORM that is still useful?
+The original version of Preserves was written for a [presentation at RubyConf 2015].
+See the [`sql` branch] for that version.
+That version was successful in helping to understand the essence of an ORM,
+so it seemed like building a *real* ORM from that might be worthwhile.
 
 This ORM is based on a few strong opinions:
 
 * The Data Mapper pattern is generally better than the Active Record pattern.
-    * Unless you're just writing a CRUD front-end, with little interesting behavior.
+    * Unless you're just writing a simple CRUD front-end, with little interesting behavior.
 * Declaring attributes in the domain model is better than hiding them elsewhere.
     * Declaring relationships in one place and attributes in another is true madness.
 
@@ -147,13 +148,15 @@ Contributing
 
 1. Fork the [project repo].
 2. Create your feature branch (`git checkout -b my-new-feature`).
-3. Make sure tests pass (`rspec` or `rake spec`).
+3. Make sure tests pass (`bundle exec rspec`).
 4. Commit your changes (`git commit -am 'Add some feature'`).
 5. Push to the branch (`git push origin my-new-feature`).
 6. Create a new [pull request].
 
 
 [Sequel]: http://sequel.jeremyevans.net/
+[presentation at RailsConf 2015]: http://confreaks.tv/videos/rubyconf2015-ruby-preserves
+[`sql` branch]: https://github.com/boochtek/ruby_preserves/tree/sql
 [Struct]: http://ruby-doc.org/core-2.2.0/Struct.html
 [OpenStruct]: http://ruby-doc.org/stdlib-2.2.0/libdoc/ostruct/rdoc/OpenStruct.html
 [Virtus]: https://github.com/solnic/virtus#readme

@@ -5,6 +5,9 @@ TODO
 ASAP
 ----
 
+* Get tests running.
+* Delete SQL stuff.
+* Add logo to repo and README (both branches).
 * Sequel has_many and belongs_to.
 * README: Document has_many and belongs_to.
     * Advise to avoid belongs_to mappings, if possible.
@@ -102,6 +105,11 @@ Soonish
 * Is there a way we could do optimistic locking?
 * Is there a way we could do lazy loading of associations?
 * Transactions / Unit of Work.
+* Can we use change sets and move writing to a separate class?
+    * Implements CQRS pattern, which is a good thing.
+    * Not sure where the Change Sets would go.
+    * But it seems like the Repo object still should represent the data set.
+    * Change sets could be where the majority of the validation and coercion happens.
 * Composite keys.
 * Use Mutant for testing.
 * Use a CI service.
