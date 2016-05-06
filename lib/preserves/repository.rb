@@ -9,9 +9,9 @@ module Preserves
     attr_accessor :model_class
     attr_accessor :dataset
 
-    def initialize(options={})
-      self.model_class = options[:model]
-      self.dataset = options[:dataset]
+    def initialize(model_class, dataset)
+      self.model_class = model_class
+      self.dataset = dataset
     end
 
     def all

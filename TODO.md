@@ -25,7 +25,6 @@ Soonish
 * Convenience methods.
     * create_table
     * scope
-* Don't require `model` keyword in Repository initializer (suggested by @jeg2).
 * More coercions.
     * Boolean
     * Date

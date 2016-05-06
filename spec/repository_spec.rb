@@ -16,19 +16,19 @@ class Address
 end
 
 
-AddressRepository = Preserves.repository(model: Address, dataset: DB[:addresses]) do
+AddressRepository = Preserves.repository(Address, DB[:addresses]) do
   mapping do
     map :city, String
   end
 end
 
-GroupRepository = Preserves.repository(model: Group, dataset: DB[:groups]) do
+GroupRepository = Preserves.repository(Group, DB[:groups]) do
   mapping do
     map :name, String
   end
 end
 
-UserRepository = Preserves.repository(model: User, dataset: DB[:users]) do
+UserRepository = Preserves.repository(User, DB[:users]) do
   mapping do
     primary_key 'username'
     map id: 'username'

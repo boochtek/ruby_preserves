@@ -73,7 +73,7 @@ Your repository should then define methods to access model objects
 in the database. (These will mostly be like ActiveRecord scopes.)
 
 ~~~ ruby
-UserRepository = Preserves.repository(model: User, dataset: DB[:users]) do
+UserRepository = Preserves.repository(User, DB[:users]) do
 
   # Declare how to map items in the dataset to objects in our class.
   mapping do
