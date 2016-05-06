@@ -46,13 +46,8 @@ module Preserves
       @mapper ||= Mapper.new(@mapping)
     end
 
-    # NOTE: We'll allow overriding this default on a per-repository basis later.
-    def data_store
-      Preserves.data_store
-    end
-
     def fetch_query(primary_key_value)
-      { mapping.primary_key.to_sym => primary_key_value}
+      { mapping.primary_key.to_sym => primary_key_value }
     end
 
   end

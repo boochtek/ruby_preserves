@@ -64,7 +64,6 @@ describe "Repository" do
   describe "selecting results from a query to an object" do
 
     describe "when DB has 0 users" do
-      let(:dataset) { repository.dataset }
       let(:selection) { repository.all }
 
       it "works when restricting with `only`" do
@@ -90,7 +89,6 @@ describe "Repository" do
         DB.run("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
       end
 
-      let(:dataset) { repository.dataset }
       let(:selection) { repository.all }
 
       it "returns a set of 1 User object" do
@@ -126,7 +124,6 @@ describe "Repository" do
         DB.run("INSERT INTO users (username, name, age) VALUES ('beth', 'Beth', 39)")
       end
 
-      let(:dataset) { repository.dataset }
       let(:selection) { repository.all }
 
       it "returns a set of 2 User objects" do
@@ -164,7 +161,6 @@ describe "Repository" do
         DB.run("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
       end
 
-      let(:dataset) { repository.dataset }
       let(:selection) { repository.all }
 
       it "sets the attribute on the object" do
@@ -177,7 +173,6 @@ describe "Repository" do
         DB.run("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
       end
 
-      let(:dataset) { repository.dataset }
       let(:selection) { repository.all }
 
       it "sets the attribute on the object to the right type" do
@@ -190,7 +185,6 @@ describe "Repository" do
         DB.run("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
       end
 
-      let(:dataset) { repository.dataset }
       let(:selection) { repository.all }
 
       it "sets the attribute on the object to the right type" do

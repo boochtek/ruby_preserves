@@ -5,8 +5,6 @@ TODO
 ASAP
 ----
 
-* Get tests running.
-* Delete SQL stuff.
 * Add logo to repo and README (both branches).
 * Sequel has_many and belongs_to.
 * README: Document has_many and belongs_to.
