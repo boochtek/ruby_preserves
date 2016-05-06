@@ -41,6 +41,10 @@ UserRepository = Preserves.repository(model: User, dataset: DB[:users]) do
   def all_with_addresses
     map(dataset, addresses: AddressRepository.dataset)
   end
+
+  def all_with_group
+    map(dataset, group: GroupRepository.dataset)
+  end
 end
 
 
@@ -229,34 +233,33 @@ describe "Repository" do
 
     end
 
-    # describe "when mapping a belongs_to relation" do
-    #   before do
-    #     DB.run("INSERT INTO groups (id, name) VALUES (1, 'admin')")
-    #     DB.run("INSERT INTO groups (id, name) VALUES (2, 'users')")
-    #     DB.run("INSERT INTO users (username, name, age, group_id) VALUES ('booch', 'Craig', 43, 1)")
-    #     DB.run("INSERT INTO users (username, name, age, group_id) VALUES ('beth', 'Beth', 39, 2)")
-    #   end
-    #
-    #   let(:group_query) { DB.run("SELECT * FROM groups") }
-    #   let(:selection) { repository.select("SELECT * FROM users", group: group_query) }
-    #
-    #   it "gets the basic fields" do
-    #     expect(selection.first.id).to eq('booch')
-    #     expect(selection.first.age).to eq(43)
-    #     expect(selection.last.id).to eq('beth')
-    #     expect(selection.last.age).to eq(39)
-    #   end
-    #
-    #   it "gets all the related items" do
-    #     expect(selection.first.group).to_not be(nil)
-    #     expect(selection.first.group).to be_a(Group)
-    #     expect(selection.first.group.name).to eq("admin")
-    #     expect(selection.last.group).to_not be(nil)
-    #     expect(selection.last.group).to be_a(Group)
-    #     expect(selection.last.group.name).to eq("users")
-    #   end
-    #
-    # end
+    describe "when mapping a belongs_to relation" do
+      before do
+        DB.run("INSERT INTO groups (id, name) VALUES (1, 'admin')")
+        DB.run("INSERT INTO groups (id, name) VALUES (2, 'users')")
+        DB.run("INSERT INTO users (username, name, age, group_id) VALUES ('booch', 'Craig', 43, 1)")
+        DB.run("INSERT INTO users (username, name, age, group_id) VALUES ('beth', 'Beth', 39, 2)")
+      end
+
+      let(:selection) { repository.all_with_group }
+
+      it "gets the basic fields" do
+        expect(selection.first.id).to eq('booch')
+        expect(selection.first.age).to eq(43)
+        expect(selection.last.id).to eq('beth')
+        expect(selection.last.age).to eq(39)
+      end
+
+      it "gets all the related items" do
+        expect(selection.first.group).to_not be(nil)
+        expect(selection.first.group).to be_a(Group)
+        expect(selection.first.group.name).to eq("admin")
+        expect(selection.last.group).to_not be(nil)
+        expect(selection.last.group).to be_a(Group)
+        expect(selection.last.group.name).to eq("users")
+      end
+
+    end
 
   end
 

@@ -5,13 +5,12 @@ TODO
 ASAP
 ----
 
-* Add logo to repo and README (both branches).
-* Sequel has_many and belongs_to.
 * README: Document has_many and belongs_to.
     * Advise to avoid belongs_to mappings, if possible.
         * Especially don't want circular dependencies.
 * README: Show an example of pagination.
 * README: Show how to use a different repository for tests, if necessary.
+* Add logo to repo and README (both branches).
 * Saving.
     * insert / update / save / delete
 * Preserves.repository() should return a module to mix in, and not take a block.
