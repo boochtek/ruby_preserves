@@ -1,3 +1,4 @@
+require "sequel"
 require "preserves/version"
 require "preserves/repository"
 
