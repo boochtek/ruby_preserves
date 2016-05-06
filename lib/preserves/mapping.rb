@@ -23,14 +23,14 @@ module Preserves
     # Note that this works to set or get the table name.
     # TODO: We don't want to allow publicly setting this, but we need to publicly get it.
     def table_name(name=nil)
-      @table_name = name unless name.nil?
+      @table_name = name.to_sym unless name.nil?
       @table_name
     end
 
     # Note that this works to set or get the primary key.
     # TODO: We don't want to allow publicly setting this, but we need to publicly get it.
     def primary_key(key_name=nil)
-      @primary_key = key_name unless key_name.nil?
+      @primary_key = key_name.to_sym unless key_name.nil?
       @primary_key
     end
 

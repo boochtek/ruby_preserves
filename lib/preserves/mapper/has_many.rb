@@ -9,11 +9,11 @@ module Preserves
       end
 
       def relation_results_for_this_object
-        @relation_results_for_this_object ||= relation_result_set.select{ |r| r[relation_foreign_key] == record.fetch(mapping.primary_key) }
+        @relation_results_for_this_object ||= relation_result_set.where(relation_foreign_key => record.fetch(mapping.primary_key))
       end
 
       def relation_foreign_key
-        @relation_foreign_key ||= relation_settings.fetch(:foreign_key) { "#{mapping.model_class.to_s.downcase}_id" }
+        @relation_foreign_key ||= relation_settings.fetch(:foreign_key){ "#{mapping.model_class.to_s.downcase}_id" }.to_sym
       end
 
       def relation_settings

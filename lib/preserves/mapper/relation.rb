@@ -17,7 +17,7 @@ module Preserves
       end
 
       def assign_attribute(object, attribute_name, value)
-        object.send("#{attribute_name}=", value)
+        object.send("#{attribute_name}=", value.domain_objects)
       end
 
     end

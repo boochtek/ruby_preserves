@@ -37,6 +37,10 @@ UserRepository = Preserves.repository(model: User, dataset: DB[:users]) do
     has_many :addresses, repository: AddressRepository, foreign_key: 'username'
     belongs_to :group, repository: GroupRepository
   end
+
+  def all_with_addresses
+    map(dataset, addresses: AddressRepository.dataset)
+  end
 end
 
 
@@ -192,40 +196,39 @@ describe "Repository" do
       end
     end
 
-    # describe "when mapping a has_many relation" do
-    #   before do
-    #     DB.run("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
-    #     DB.run("INSERT INTO users (username, name, age) VALUES ('beth', 'Beth', 39)")
-    #     DB.run("INSERT INTO addresses (city, username) VALUES ('Overland', 'booch')")
-    #     DB.run("INSERT INTO addresses (city, username) VALUES ('Wildwood', 'booch')")
-    #     DB.run("INSERT INTO addresses (city, username) VALUES ('Ballwin', 'booch')")
-    #     DB.run("INSERT INTO addresses (city, username) VALUES ('Ballwin', 'beth')")
-    #     DB.run("INSERT INTO addresses (city, username) VALUES ('Keokuk', 'unknown')")
-    #   end
-    #
-    #   let(:address_query) { DB.run("SELECT * FROM addresses") }
-    #   let(:selection) { repository.select("SELECT * FROM users", addresses: address_query) }
-    #
-    #   it "gets the basic fields" do
-    #     expect(selection.first.id).to eq('booch')
-    #     expect(selection.first.age).to eq(43)
-    #     expect(selection.last.id).to eq('beth')
-    #     expect(selection.last.age).to eq(39)
-    #   end
-    #
-    #   it "gets all the related items" do
-    #     expect(selection.first.addresses).to_not be(nil)
-    #     expect(selection.first.addresses.size).to eq(3)
-    #     expect(selection.first.addresses.map(&:city)).to include("Overland")
-    #     expect(selection.first.addresses.map(&:city)).to include("Wildwood")
-    #     expect(selection.first.addresses.map(&:city)).to include("Ballwin")
-    #     expect(selection.last.addresses).to_not be(nil)
-    #     expect(selection.last.addresses.size).to eq(1)
-    #     expect(selection.last.addresses.map(&:city)).to include("Ballwin")
-    #   end
-    #
-    # end
-    #
+    describe "when mapping a has_many relation" do
+      before do
+        DB.run("INSERT INTO users (username, name, age) VALUES ('booch', 'Craig', 43)")
+        DB.run("INSERT INTO users (username, name, age) VALUES ('beth', 'Beth', 39)")
+        DB.run("INSERT INTO addresses (city, username) VALUES ('Overland', 'booch')")
+        DB.run("INSERT INTO addresses (city, username) VALUES ('Wildwood', 'booch')")
+        DB.run("INSERT INTO addresses (city, username) VALUES ('Ballwin', 'booch')")
+        DB.run("INSERT INTO addresses (city, username) VALUES ('Ballwin', 'beth')")
+        DB.run("INSERT INTO addresses (city, username) VALUES ('Keokuk', 'unknown')")
+      end
+
+      let(:selection) { repository.all_with_addresses }
+
+      it "gets the basic fields" do
+        expect(selection.first.id).to eq('booch')
+        expect(selection.first.age).to eq(43)
+        expect(selection.last.id).to eq('beth')
+        expect(selection.last.age).to eq(39)
+      end
+
+      it "gets all the related items" do
+        expect(selection.first.addresses).to_not be(nil)
+        expect(selection.first.addresses.size).to eq(3)
+        expect(selection.first.addresses.map(&:city)).to include("Overland")
+        expect(selection.first.addresses.map(&:city)).to include("Wildwood")
+        expect(selection.first.addresses.map(&:city)).to include("Ballwin")
+        expect(selection.last.addresses).to_not be(nil)
+        expect(selection.last.addresses.size).to eq(1)
+        expect(selection.last.addresses.map(&:city)).to include("Ballwin")
+      end
+
+    end
+
     # describe "when mapping a belongs_to relation" do
     #   before do
     #     DB.run("INSERT INTO groups (id, name) VALUES (1, 'admin')")
