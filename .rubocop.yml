@@ -57,5 +57,17 @@ Style/SpaceBeforeBlockBraces:
 
 Style/PredicateName:
   NameWhitelist:
-    - has_many  
+    - has_many
 
+# We'd normally keep this enabled, but we're allowing `size == 0` for consistency.
+Style/ZeroLengthPredicate:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: semantic
+
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+Style/MutableConstant:
+  Enabled: false
